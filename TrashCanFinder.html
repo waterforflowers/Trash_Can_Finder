@@ -9,7 +9,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="theme-color" content="#1d4ed8" />
+    <meta name="theme-color" content="#1d4ed8" id="theme-color-meta" />
     <title>SPOTLESS</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -39,6 +39,9 @@
           max-width: 100%;
           min-height: 90vh;
           margin: 0;
+        }
+        .flex-grow {
+          padding: 0.5rem 1rem !important;
         }
         .tab-button {
           padding: 1rem 0.5rem;
@@ -396,12 +399,12 @@
         </button>
       </nav>
 
-      <div class="flex-grow p-6 overflow-y-auto">
+      <div class="flex-grow px-4 py-2 overflow-y-auto">
         <div id="message-box" class="message-box"></div>
 
         <div id="content-map" class="tab-content">
           <h2
-            class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2"
+            class="text-xl font-semibold text-gray-800 mb-2 flex items-center gap-2"
           >
             <i data-lucide="map-pin" class="w-5 h-5"></i>
             Discover Trash Cans
@@ -462,7 +465,7 @@
 
         <div id="content-mark-can" class="tab-content hidden">
           <h2
-            class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2"
+            class="text-xl font-semibold text-gray-800 mb-2 flex items-center gap-2"
           >
             <i data-lucide="plus-circle" class="w-5 h-5"></i>
             Mark a New Trash Can
@@ -566,7 +569,7 @@
 
         <div id="content-chat" class="tab-content hidden h-full flex flex-col">
           <h2
-            class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2"
+            class="text-xl font-semibold text-gray-800 mb-2 flex items-center gap-2"
           >
             <i data-lucide="messages-square" class="w-5 h-5"></i>
             Community Chat Board
@@ -637,7 +640,7 @@
 
         <div id="content-progress" class="tab-content hidden">
           <h2
-            class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2"
+            class="text-xl font-semibold text-gray-800 mb-2 flex items-center gap-2"
           >
             <i data-lucide="activity" class="w-5 h-5"></i>
             Your Activity & Achievements
@@ -905,11 +908,29 @@
         authMessageDiv.classList.add("hidden"); // Clear previous messages
         authEmailInput.value = "";
         authPasswordInput.value = "";
+
+        // Change theme color to purple for sign in modal
+        const themeColorMeta = document.getElementById("theme-color-meta");
+        themeColorMeta.setAttribute("content", "#8b5cf6"); // violet-500 (purple)
       }
 
       // Function to close the auth modal
       function closeAuthModal() {
         authModal.classList.remove("show");
+
+        // Restore theme color to current tab's color
+        const activeTab = document.querySelector(".tab-button.active");
+        if (activeTab) {
+          let tabId = "";
+          if (activeTab.id === "tab-map") tabId = "map";
+          else if (activeTab.id === "tab-mark-can") tabId = "mark-can";
+          else if (activeTab.id === "tab-chat") tabId = "chat";
+          else if (activeTab.id === "tab-progress") tabId = "progress";
+
+          if (tabId) {
+            updateThemeColor(tabId);
+          }
+        }
       }
 
       // Function to sign out the user
@@ -2105,6 +2126,29 @@
         uploadPhotoInput.value = ""; // Clear file input
       }
 
+      // Function to update theme color based on active tab
+      function updateThemeColor(tabId) {
+        const themeColorMeta = document.getElementById("theme-color-meta");
+        let color = "#1d4ed8"; // Default blue
+
+        switch (tabId) {
+          case "map":
+            color = "#1d4ed8"; // blue-700
+            break;
+          case "mark-can":
+            color = "#dc2626"; // red-600
+            break;
+          case "chat":
+            color = "#10b981"; // emerald-500
+            break;
+          case "progress":
+            color = "#f59e0b"; // amber-500
+            break;
+        }
+
+        themeColorMeta.setAttribute("content", color);
+      }
+
       // Tab switching logic
       window.showTab = function (tabId) {
         document.querySelectorAll(".tab-content").forEach((content) => {
@@ -2164,6 +2208,9 @@
           ); /* Use amber-500 for yellow */
           // My Progress tab does not have dynamic buttons that need recoloring.
         }
+
+        // Update theme color for mobile browser
+        updateThemeColor(tabId);
 
         document.getElementById(`content-${tabId}`).classList.remove("hidden");
 
