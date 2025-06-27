@@ -44,23 +44,25 @@
           padding: 0.25rem 1.25rem !important;
         }
         .tab-button {
-          padding: 1rem 0.5rem;
-          font-size: 0.75rem;
-          min-height: 60px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          line-height: 1.2;
-          flex: 1;
-          min-width: 0;
+          padding: 1rem 0.5rem !important;
+          font-size: 0.75rem !important;
+          min-height: 60px !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          justify-content: center !important;
+          text-align: center !important;
+          line-height: 1.2 !important;
+          flex: 1 !important;
+          min-width: 0 !important;
+          gap: 0.25rem !important;
         }
         .tab-button i {
-          margin-right: 0;
-          margin-bottom: 0.25rem;
-          width: 1.25rem;
-          height: 1.25rem;
+          margin-right: 0 !important;
+          margin-bottom: 0.25rem !important;
+          width: 1.25rem !important;
+          height: 1.25rem !important;
+          order: 0 !important;
         }
         .btn-primary {
           padding: 1rem 1.5rem;
@@ -75,6 +77,21 @@
         }
         .chat-message-bubble {
           max-width: 90%;
+        }
+      }
+
+      /* Desktop tab button layout - icon to the left of text */
+      @media (min-width: 769px) {
+        .tab-button {
+          flex-direction: row !important;
+          align-items: center !important;
+          justify-content: center !important;
+          text-align: left !important;
+        }
+        .tab-button i {
+          margin-right: 0.5rem !important;
+          margin-bottom: 0 !important;
+          order: -1 !important;
         }
       }
       .container {
@@ -96,6 +113,11 @@
         color: #4b5563;
         transition: all 0.2s;
         cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
       }
       /* Default active state for Map & Routes (blue) */
       .tab-button.active {
