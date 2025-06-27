@@ -1,0 +1,32 @@
+1. Objects/Dictionaries:
+userSettings - User preferences (units, zoom level, notifications, theme)
+trashCanCategories - Categories with icons and colors for different types of trash cans
+achievementSystem - Structured badge and milestone system
+mapMarkers - Maps trash can IDs to Google Maps marker objects
+frequentedTrashCans - Tracks visit counts for each trash can
+
+2. Arrays:
+searchHistory - Stores recent search terms (last 10)
+favoriteLocations - User's favorite trash can locations
+recentRoutes - Recently planned routes (last 5)
+trashCans - All trash can objects
+generalChatMessages & specificChatMessages - Chat messages
+mapPolylines - Google Maps route lines
+
+3. Utility Functions:
+saveUserSettings() & loadUserSettings() - Persist user preferences
+addToSearchHistory() & loadSearchHistory() - Manage search history
+addToFavorites() & removeFromFavorites() - Manage favorite locations
+addToRecentRoutes() & loadRecentRoutes() - Track recent routes
+checkAchievements() - Enhanced achievement system
+filterTrashCans() - Advanced filtering functionality
+
+4. New UI Features:
+Search & Filter Section - Search trash cans and apply filters
+Enhanced Progress Tab - Shows search history, favorites, recent routes, and settings
+Interactive Filtering - Filter by photos, visited status, etc.
+
+5. Data Persistence:
+All user data structures are saved to localStorage for persistence
+Data is loaded when user signs in
+Automatic saving when data changes

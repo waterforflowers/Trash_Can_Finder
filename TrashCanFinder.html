@@ -431,6 +431,49 @@
             <i data-lucide="map-pin" class="w-5 h-5"></i>
             Discover Trash Cans
           </h2>
+
+          <!-- Search and Filter Section -->
+          <div class="bg-blue-50 p-4 rounded-xl mb-4 border border-blue-200">
+            <h3
+              class="text-md font-semibold text-blue-800 mb-2 flex items-center gap-2"
+            >
+              <i data-lucide="search" class="w-4 h-4"></i>
+              Search & Filter
+            </h3>
+            <div class="flex gap-2 mb-2">
+              <input
+                type="text"
+                id="trash-can-search"
+                placeholder="Search trash cans by description or address..."
+                class="input-field flex-grow"
+              />
+              <button id="search-btn" class="btn-primary blue">
+                <i data-lucide="search" class="w-4 h-4"></i>
+                Search
+              </button>
+            </div>
+            <div class="flex flex-wrap gap-2 text-xs">
+              <button
+                class="filter-btn bg-green-100 text-green-800 px-2 py-1 rounded"
+                data-filter="hasPhoto"
+              >
+                📸 Has Photo
+              </button>
+              <button
+                class="filter-btn bg-blue-100 text-blue-800 px-2 py-1 rounded"
+                data-filter="visited"
+              >
+                ✅ Visited
+              </button>
+              <button
+                class="filter-btn bg-purple-100 text-purple-800 px-2 py-1 rounded"
+                data-filter="clear"
+              >
+                🗑️ Clear Filters
+              </button>
+            </div>
+          </div>
+
           <!-- Google Map div -->
           <div id="map"></div>
 
@@ -735,6 +778,67 @@
               </ul>
             </div>
           </div>
+
+          <!-- Enhanced Data Display Section -->
+          <div class="mt-6 bg-gray-50 p-5 rounded-xl shadow-sm space-y-4">
+            <h3
+              class="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2"
+            >
+              <i data-lucide="database" class="w-5 h-5"></i>
+              Your Data & Preferences
+            </h3>
+
+            <!-- Search History -->
+            <div class="mb-4">
+              <h4 class="text-md font-medium text-gray-600 mb-2">
+                Recent Searches
+              </h4>
+              <div id="search-history-display" class="text-sm text-gray-500">
+                <p class="italic">No recent searches</p>
+              </div>
+            </div>
+
+            <!-- Favorite Locations -->
+            <div class="mb-4">
+              <h4 class="text-md font-medium text-gray-600 mb-2">
+                Favorite Locations
+              </h4>
+              <div id="favorites-display" class="text-sm text-gray-500">
+                <p class="italic">No favorite locations</p>
+              </div>
+            </div>
+
+            <!-- Recent Routes -->
+            <div class="mb-4">
+              <h4 class="text-md font-medium text-gray-600 mb-2">
+                Recent Routes
+              </h4>
+              <div id="recent-routes-display" class="text-sm text-gray-500">
+                <p class="italic">No recent routes</p>
+              </div>
+            </div>
+
+            <!-- User Settings -->
+            <div class="mb-4">
+              <h4 class="text-md font-medium text-gray-600 mb-2">Settings</h4>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span>Preferred Units:</span>
+                  <span id="units-display" class="font-medium">km</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Default Map Zoom:</span>
+                  <span id="zoom-display" class="font-medium">12</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Notifications:</span>
+                  <span id="notifications-display" class="font-medium"
+                    >Enabled</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -868,6 +972,75 @@
       let generalChatMessages = [];
       let specificChatMessages = [];
       let currentSelectedCanId = null;
+
+      // Enhanced data structures for better functionality
+      let userSettings = {
+        defaultMapZoom: 12,
+        preferredUnits: "km", // 'km' or 'miles'
+        notificationsEnabled: true,
+        autoTrackLocation: false,
+        theme: "light", // 'light' or 'dark'
+      };
+
+      let searchHistory = [];
+      let favoriteLocations = [];
+      let recentRoutes = [];
+      let trashCanCategories = {
+        park: { icon: "🌳", color: "#10b981" },
+        street: { icon: "🚶", color: "#3b82f6" },
+        beach: { icon: "🏖️", color: "#f59e0b" },
+        shopping: { icon: "🛍️", color: "#8b5cf6" },
+        transport: { icon: "🚌", color: "#ef4444" },
+        other: { icon: "🗑️", color: "#6b7280" },
+      };
+
+      let achievementSystem = {
+        badges: {
+          first_visit: {
+            name: "First Steps",
+            description: "Visit your first trash can",
+            icon: "👣",
+            requirement: 1,
+          },
+          explorer: {
+            name: "Explorer",
+            description: "Visit 5 different trash cans",
+            icon: "🗺️",
+            requirement: 5,
+          },
+          photographer: {
+            name: "Photographer",
+            description: "Upload 3 photos",
+            icon: "📸",
+            requirement: 3,
+          },
+          community: {
+            name: "Community Helper",
+            description: "Make 5 comments",
+            icon: "💬",
+            requirement: 5,
+          },
+          mapper: {
+            name: "Mapper",
+            description: "Mark 2 new trash cans",
+            icon: "📍",
+            requirement: 2,
+          },
+          walker: {
+            name: "Walker",
+            description: "Walk 10km total",
+            icon: "🚶‍♂️",
+            requirement: 10,
+          },
+        },
+        milestones: {
+          distance: [1, 5, 10, 25, 50, 100], // km
+          visits: [1, 5, 10, 25, 50, 100],
+          photos: [1, 3, 5, 10, 25, 50],
+          comments: [1, 5, 10, 25, 50, 100],
+          marked: [1, 2, 5, 10, 25, 50],
+        },
+      };
 
       // Get Auth Modal Elements
       const authModal = document.getElementById("auth-modal");
@@ -1026,6 +1199,13 @@
               showTab("map");
               lucide.createIcons();
               closeAuthModal();
+
+              // Load user's local data structures
+              loadUserSettings();
+              loadSearchHistory();
+              loadFavorites();
+              loadRecentRoutes();
+
               showMessage(`Welcome, ${userDisplayName}!`, "success");
             } else {
               // No user signed in or signed out
@@ -1631,6 +1811,14 @@
           map.setZoom(Math.min(map.getZoom(), 15)); // Don't zoom too close if points are far
 
           showMessage("Route planned!", "success");
+
+          // Save to recent routes
+          addToRecentRoutes({
+            start: startInput,
+            end: endInput,
+            distance: distance,
+            instructions: routeInstructions,
+          });
         });
 
       // Simple Haversine distance calculation (approximation)
@@ -1676,6 +1864,7 @@
         });
 
         checkAndAwardBadges(); // Re-check badges after update
+        checkAchievements(); // Check for new achievements using the enhanced system
       }
 
       // Display user progress (distance, visited cans, marked cans, badges)
@@ -1731,6 +1920,9 @@
           });
           lucide.createIcons(); // Re-render Lucide icons
         }
+
+        // Display enhanced data structures
+        displayEnhancedData();
       }
 
       // Logic for awarding badges
@@ -2270,6 +2462,364 @@
 
       // Initialize the app on window load (Firebase will initialize before map callback if defer)
       window.onload = initializeFirebaseApp;
+
+      // Utility functions for data structure management
+      function saveUserSettings() {
+        if (userId) {
+          localStorage.setItem(
+            `userSettings_${userId}`,
+            JSON.stringify(userSettings)
+          );
+        }
+      }
+
+      function loadUserSettings() {
+        if (userId) {
+          const saved = localStorage.getItem(`userSettings_${userId}`);
+          if (saved) {
+            userSettings = { ...userSettings, ...JSON.parse(saved) };
+          }
+        }
+      }
+
+      function addToSearchHistory(searchTerm) {
+        if (!searchHistory.includes(searchTerm)) {
+          searchHistory.unshift(searchTerm);
+          searchHistory = searchHistory.slice(0, 10); // Keep only last 10 searches
+          if (userId) {
+            localStorage.setItem(
+              `searchHistory_${userId}`,
+              JSON.stringify(searchHistory)
+            );
+          }
+        }
+      }
+
+      function loadSearchHistory() {
+        if (userId) {
+          const saved = localStorage.getItem(`searchHistory_${userId}`);
+          if (saved) {
+            searchHistory = JSON.parse(saved);
+          }
+        }
+      }
+
+      function addToFavorites(location) {
+        const exists = favoriteLocations.find((fav) => fav.id === location.id);
+        if (!exists) {
+          favoriteLocations.push({
+            ...location,
+            addedAt: new Date().toISOString(),
+          });
+          if (userId) {
+            localStorage.setItem(
+              `favorites_${userId}`,
+              JSON.stringify(favoriteLocations)
+            );
+          }
+          showMessage("Location added to favorites!", "success");
+        } else {
+          showMessage("Location already in favorites!", "info");
+        }
+      }
+
+      function removeFromFavorites(locationId) {
+        favoriteLocations = favoriteLocations.filter(
+          (fav) => fav.id !== locationId
+        );
+        if (userId) {
+          localStorage.setItem(
+            `favorites_${userId}`,
+            JSON.stringify(favoriteLocations)
+          );
+        }
+        showMessage("Location removed from favorites!", "success");
+      }
+
+      function loadFavorites() {
+        if (userId) {
+          const saved = localStorage.getItem(`favorites_${userId}`);
+          if (saved) {
+            favoriteLocations = JSON.parse(saved);
+          }
+        }
+      }
+
+      function addToRecentRoutes(route) {
+        const routeId = `${route.start}-${route.end}`;
+        const exists = recentRoutes.find((r) => r.id === routeId);
+        if (!exists) {
+          recentRoutes.unshift({
+            id: routeId,
+            ...route,
+            createdAt: new Date().toISOString(),
+          });
+          recentRoutes = recentRoutes.slice(0, 5); // Keep only last 5 routes
+          if (userId) {
+            localStorage.setItem(
+              `recentRoutes_${userId}`,
+              JSON.stringify(recentRoutes)
+            );
+          }
+        }
+      }
+
+      function loadRecentRoutes() {
+        if (userId) {
+          const saved = localStorage.getItem(`recentRoutes_${userId}`);
+          if (saved) {
+            recentRoutes = JSON.parse(saved);
+          }
+        }
+      }
+
+      function checkAchievements() {
+        if (!currentUserData) return;
+
+        const stats = {
+          visits: (currentUserData.visitedTrashCans || []).length,
+          photos: (currentUserData.photosTaken || []).length,
+          comments: (currentUserData.comments || []).length,
+          marked: (currentUserData.markedTrashCans || []).length,
+          distance: currentUserData.totalDistanceWalked || 0,
+        };
+
+        // Check for new achievements
+        Object.entries(achievementSystem.badges).forEach(([key, badge]) => {
+          let earned = false;
+
+          switch (key) {
+            case "first_visit":
+              earned = stats.visits >= badge.requirement;
+              break;
+            case "explorer":
+              earned = stats.visits >= badge.requirement;
+              break;
+            case "photographer":
+              earned = stats.photos >= badge.requirement;
+              break;
+            case "community":
+              earned = stats.comments >= badge.requirement;
+              break;
+            case "mapper":
+              earned = stats.marked >= badge.requirement;
+              break;
+            case "walker":
+              earned = stats.distance >= badge.requirement;
+              break;
+          }
+
+          if (earned && !currentUserData.badges.includes(badge.name)) {
+            showMessage(
+              `🏆 Achievement Unlocked: ${badge.name}! ${badge.description}`,
+              "success"
+            );
+            // Add to user's badges
+            const userDocRef = doc(
+              db,
+              `artifacts/${appId}/users/${userId}/profile`,
+              "data"
+            );
+            updateDoc(userDocRef, {
+              badges: arrayUnion(badge.name),
+            });
+          }
+        });
+      }
+
+      function filterTrashCans(criteria) {
+        return trashCans.filter((can) => {
+          if (criteria.category && can.category !== criteria.category)
+            return false;
+          if (criteria.hasPhoto && !can.imageUrl) return false;
+          if (
+            criteria.visited &&
+            !currentUserData?.visitedTrashCans?.includes(can.id)
+          )
+            return false;
+          if (criteria.searchTerm) {
+            const searchLower = criteria.searchTerm.toLowerCase();
+            return (
+              can.description.toLowerCase().includes(searchLower) ||
+              can.address.toLowerCase().includes(searchLower)
+            );
+          }
+          return true;
+        });
+      }
+
+      // Function to display enhanced data structures
+      function displayEnhancedData() {
+        // Display search history
+        const searchHistoryDisplay = document.getElementById(
+          "search-history-display"
+        );
+        if (searchHistory.length === 0) {
+          searchHistoryDisplay.innerHTML =
+            '<p class="italic">No recent searches</p>';
+        } else {
+          searchHistoryDisplay.innerHTML = searchHistory
+            .slice(0, 5)
+            .map((term) => `<div class="mb-1">🔍 ${term}</div>`)
+            .join("");
+        }
+
+        // Display favorite locations
+        const favoritesDisplay = document.getElementById("favorites-display");
+        if (favoriteLocations.length === 0) {
+          favoritesDisplay.innerHTML =
+            '<p class="italic">No favorite locations</p>';
+        } else {
+          favoritesDisplay.innerHTML = favoriteLocations
+            .slice(0, 5)
+            .map(
+              (fav) =>
+                `<div class="mb-1">⭐ ${fav.description || fav.address}</div>`
+            )
+            .join("");
+        }
+
+        // Display recent routes
+        const recentRoutesDisplay = document.getElementById(
+          "recent-routes-display"
+        );
+        if (recentRoutes.length === 0) {
+          recentRoutesDisplay.innerHTML =
+            '<p class="italic">No recent routes</p>';
+        } else {
+          recentRoutesDisplay.innerHTML = recentRoutes
+            .slice(0, 3)
+            .map(
+              (route) =>
+                `<div class="mb-1">🗺️ ${route.start} → ${
+                  route.end
+                } (${route.distance.toFixed(2)}km)</div>`
+            )
+            .join("");
+        }
+
+        // Display user settings
+        document.getElementById("units-display").textContent =
+          userSettings.preferredUnits;
+        document.getElementById("zoom-display").textContent =
+          userSettings.defaultMapZoom;
+        document.getElementById("notifications-display").textContent =
+          userSettings.notificationsEnabled ? "Enabled" : "Disabled";
+      }
+
+      // Initialize the app on window load (Firebase will initialize before map callback if defer)
+      window.onload = initializeFirebaseApp;
+
+      // Search and Filter Event Listeners
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchBtn = document.getElementById("search-btn");
+        const searchInput = document.getElementById("trash-can-search");
+        const filterBtns = document.querySelectorAll(".filter-btn");
+
+        if (searchBtn) {
+          searchBtn.addEventListener("click", function () {
+            const searchTerm = searchInput.value.trim();
+            if (searchTerm) {
+              addToSearchHistory(searchTerm);
+              const filteredCans = filterTrashCans({ searchTerm: searchTerm });
+              displayFilteredTrashCans(filteredCans);
+              showMessage(
+                `Found ${filteredCans.length} trash cans matching "${searchTerm}"`,
+                "success"
+              );
+            }
+          });
+        }
+
+        if (searchInput) {
+          searchInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              searchBtn.click();
+            }
+          });
+        }
+
+        filterBtns.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const filterType = this.getAttribute("data-filter");
+            let criteria = {};
+
+            switch (filterType) {
+              case "hasPhoto":
+                criteria.hasPhoto = true;
+                break;
+              case "visited":
+                criteria.visited = true;
+                break;
+              case "clear":
+                displayTrashCansOnMap(); // Show all cans
+                showMessage("Filters cleared", "info");
+                return;
+            }
+
+            const filteredCans = filterTrashCans(criteria);
+            displayFilteredTrashCans(filteredCans);
+            showMessage(
+              `Showing ${filteredCans.length} filtered trash cans`,
+              "info"
+            );
+          });
+        });
+      });
+
+      // Function to display filtered trash cans
+      function displayFilteredTrashCans(filteredCans) {
+        // Clear existing markers
+        for (const canId in mapMarkers) {
+          mapMarkers[canId].setMap(null);
+        }
+        mapMarkers = {};
+
+        // Add markers only for filtered cans
+        filteredCans.forEach((can) => {
+          const position = { lat: can.latitude, lng: can.longitude };
+          const marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            icon: {
+              url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+              scaledSize: new google.maps.Size(32, 32),
+            },
+            title: can.description || "Trash Can",
+          });
+
+          let infoContent = `
+            <div class="trash-can-marker-content">
+                <strong>Trash Can ID:</strong> ${can.id.substring(0, 8)}...<br>
+                <strong>Description:</strong> ${can.description || "N/A"}<br>
+                <strong>Marked by:</strong> ${
+                  can.markedByUserDisplayName || "Unknown"
+                }<br>
+          `;
+          if (can.imageUrl) {
+            infoContent += `<img src="${can.imageUrl}" alt="Trash Can Photo" class="info-window-image">`;
+          }
+          infoContent += `<br><button onclick="window.selectTrashCanForChat('${can.id}')" class="btn-primary p-2 text-sm rounded-md mt-2">View Chat</button></div>`;
+
+          marker.addListener("click", () => {
+            infoWindow.setContent(infoContent);
+            infoWindow.open(map, marker);
+            trackVisitedCan(can.id);
+          });
+
+          mapMarkers[can.id] = marker;
+        });
+
+        // Fit map to filtered bounds
+        if (filteredCans.length > 0) {
+          const bounds = new google.maps.LatLngBounds();
+          filteredCans.forEach((can) =>
+            bounds.extend({ lat: can.latitude, lng: can.longitude })
+          );
+          map.fitBounds(bounds);
+          map.setZoom(Math.min(map.getZoom(), 15));
+        }
+      }
     </script>
   </body>
 </html>
