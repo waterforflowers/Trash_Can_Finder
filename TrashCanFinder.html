@@ -2,7 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#1d4ed8" />
     <title>SPOTLESS</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,6 +28,51 @@
         align-items: flex-start;
         min-height: 100vh;
         padding: 20px;
+      }
+
+      /* Mobile-specific improvements */
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+        .container {
+          max-width: 100%;
+          min-height: 90vh;
+          margin: 0;
+        }
+        .tab-button {
+          padding: 1rem 0.5rem;
+          font-size: 0.75rem;
+          min-height: 60px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          line-height: 1.2;
+          flex: 1;
+          min-width: 0;
+        }
+        .tab-button i {
+          margin-right: 0;
+          margin-bottom: 0.25rem;
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+        .btn-primary {
+          padding: 1rem 1.5rem;
+          min-height: 44px; /* iOS minimum touch target */
+        }
+        .input-field {
+          padding: 1rem;
+          min-height: 44px;
+        }
+        #map {
+          height: 300px;
+        }
+        .chat-message-bubble {
+          max-width: 90%;
+        }
       }
       .container {
         background-color: #ffffff;
@@ -319,7 +371,7 @@
           class="tab-button active blue"
           onclick="showTab('map')"
         >
-          <i data-lucide="map" class="inline-block mr-2 w-5 h-5"></i>
+          <i data-lucide="map" class="w-5 h-5"></i>
           Map & Routes
         </button>
         <button
@@ -327,11 +379,11 @@
           class="tab-button"
           onclick="showTab('mark-can')"
         >
-          <i data-lucide="plus-circle" class="inline-block mr-2 w-5 h-5"></i>
+          <i data-lucide="plus-circle" class="w-5 h-5"></i>
           Mark Trash Can
         </button>
         <button id="tab-chat" class="tab-button" onclick="showTab('chat')">
-          <i data-lucide="message-square" class="inline-block mr-2 w-5 h-5"></i>
+          <i data-lucide="message-square" class="w-5 h-5"></i>
           Community Chat
         </button>
         <button
@@ -339,7 +391,7 @@
           class="tab-button"
           onclick="showTab('progress')"
         >
-          <i data-lucide="award" class="inline-block mr-2 w-5 h-5"></i>
+          <i data-lucide="award" class="w-5 h-5"></i>
           My Progress
         </button>
       </nav>
@@ -519,6 +571,10 @@
             <i data-lucide="messages-square" class="w-5 h-5"></i>
             Community Chat Board
           </h2>
+          <p class="text-gray-600 mb-4 text-sm">
+            Join the global community discussion below, or click on any trash
+            can on the map and select "View Chat" to discuss specific locations.
+          </p>
           <div
             id="general-chat-messages"
             class="flex-grow bg-gray-50 p-4 rounded-xl overflow-y-auto mb-4 border border-gray-200 flex flex-col items-start"
