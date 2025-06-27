@@ -509,7 +509,7 @@
               <input
                 type="text"
                 id="trash-can-search"
-                placeholder="Search trash cans by description or address..."
+                placeholder="Search trash cans by ID or address..."
                 class="input-field w-full"
               />
               <div class="flex gap-2">
@@ -2588,7 +2588,31 @@
       };
 
       // Initialize the app on window load (Firebase will initialize before map callback if defer)
-      window.onload = initializeFirebaseApp;
+      window.onload = function () {
+        initializeFirebaseApp();
+        // Initialize Lucide icons on page load with a small delay to ensure library is loaded
+        setTimeout(function () {
+          if (typeof lucide !== "undefined") {
+            lucide.createIcons();
+          } else {
+            // Retry after a bit more time if lucide isn't available yet
+            setTimeout(function () {
+              if (typeof lucide !== "undefined") {
+                lucide.createIcons();
+              }
+            }, 500);
+          }
+        }, 100);
+      };
+
+      // Also initialize icons when DOM content is loaded (fallback)
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+          if (typeof lucide !== "undefined") {
+            lucide.createIcons();
+          }
+        }, 100);
+      });
 
       // Utility functions for data structure management
       function saveUserSettings() {
@@ -2778,7 +2802,7 @@
           if (criteria.searchTerm) {
             const searchLower = criteria.searchTerm.toLowerCase();
             return (
-              can.description.toLowerCase().includes(searchLower) ||
+              can.id.toLowerCase().includes(searchLower) ||
               can.address.toLowerCase().includes(searchLower)
             );
           }
