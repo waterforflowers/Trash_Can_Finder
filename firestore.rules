@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Define a variable for the appId to be used in paths
+    // This allows the rules to be specific to the current application instance
+    function getAppId() {
+      // Assuming the appId is part of the document path, e.g., /artifacts/{appId}/...
+      // Or if it's passed as a request parameter, you'd retrieve it differently.
+      // For Canvas, __app_id is a global variable that maps to {appId}.
+      return request.resource.data.appId; // Placeholder - not directly used by rules match
+    }
+
+    // --- User Authentication and Profile Rules ---
+    // Allow users to read and write their own profile data
+    // Path: /artifacts/{appId}/users/{userId}/profile/data
+    match /artifacts/{appId}/users/{userId}/profile/data {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // --- Public Data Rules (Trash Cans, General Chat, Specific Trash Can Chats) ---
+
+    // Rules for the 'trash_cans' collection
+    // Path: /artifacts/{appId}/public/data/trash_cans/{canId}
+    // Allow any authenticated user to read all trash cans
+    // Allow any authenticated user to create new trash cans
+    // Allow the original marker of the trash can to update it (optional, but good practice)
+    match /artifacts/{appId}/public/data/trash_cans/{canId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && request.resource.data.markedByUserId == request.auth.uid;
+      // You might also want to add a delete rule here if allowed:
+      // allow delete: if request.auth != null && resource.data.markedByUserId == request.auth.uid;
+    }
+
+    // Rules for the 'general_chat' collection
+    // Path: /artifacts/{appId}/public/data/general_chat/{messageId}
+    // Allow any authenticated user to read and create messages in the general chat
+    match /artifacts/{appId}/public/data/general_chat/{messageId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      // No update/delete for general chat messages typically
+    }
+
+    // Rules for specific 'can_chats' subcollection under each trash can
+    // Path: /artifacts/{appId}/public/data/trash_cans/{canId}/can_chats/{messageId}
+    // Allow any authenticated user to read and create messages specific to a trash can
+    match /artifacts/{appId}/public/data/trash_cans/{canId}/can_chats/{messageId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      // No update/delete for specific chat messages typically
+    }
+  }
+}
