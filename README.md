@@ -1,6 +1,6 @@
 **🗑️ TrashCanFinder - SPOTLESS (working title) 🗑️**
 
-A web application for discovering, marking, and discussing trash can locations in your community.
+- A web application for discovering, marking, and discussing trash can locations in your community.
 
 **♻️ Features ♻️**
 
