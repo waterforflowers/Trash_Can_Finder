@@ -1,0 +1,2150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SPOTLESS</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Lucide Icons (for general UI icons) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f3f4f6;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .container {
+        background-color: #ffffff;
+        border-radius: 1rem; /* rounded-2xl */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+        width: 100%;
+        max-width: 900px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 80vh;
+      }
+      .tab-button {
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        color: #4b5563;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+      /* Default active state for Map & Routes (blue) */
+      .tab-button.active {
+        color: #ffffff;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+      /* Specific active states for other tabs */
+      .tab-button.active.blue {
+        background-color: #1d4ed8; /* blue-700 */
+      }
+      .tab-button.active.red {
+        background-color: #dc2626; /* red-600 */
+      }
+      .tab-button.active.green {
+        background-color: #10b981; /* emerald-500 */
+      }
+      .tab-button.active.yellow {
+        background-color: #f59e0b; /* amber-500 */
+      }
+      .tab-button:hover:not(.active) {
+        background-color: #e5e7eb;
+      }
+
+      /* Base style for primary buttons */
+      .btn-primary {
+        color: #ffffff;
+        /* Symmetric padding for perfect centering */
+        padding: 0.75rem 1.5rem; /* Symmetric horizontal padding */
+        border-radius: 0.5rem;
+        font-weight: 600;
+        transition: background-color 0.2s, transform 0.1s;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center; /* This centers the flex content (icon and text) */
+        gap: 0.5rem; /* Space between icon and text */
+      }
+
+      /* Specific color variants for primary buttons */
+      .btn-primary.blue {
+        background-color: #1d4ed8; /* blue-700 */
+      }
+      .btn-primary.blue:hover {
+        background-color: #1e40af; /* blue-800 */
+      }
+      .btn-primary.red {
+        background-color: #dc2626; /* red-600 */
+      }
+      .btn-primary.red:hover {
+        background-color: #b91c1c; /* red-700 */
+      }
+      .btn-primary.green {
+        background-color: #10b981; /* emerald-500 */
+      }
+      .btn-primary.green:hover {
+        background-color: #059669; /* emerald-600 */
+      }
+      .btn-primary.yellow {
+        background-color: #f59e0b; /* amber-500 */
+      }
+      .btn-primary.yellow:hover {
+        background-color: #d97706; /* amber-600 */
+      }
+      .btn-primary.purple {
+        background-color: #8b5cf6; /* violet-500 */
+      }
+      .btn-primary.purple:hover {
+        background-color: #7c3aed; /* violet-600 */
+      }
+
+      .input-field {
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid #d1d5db;
+        width: 100%;
+        transition: border-color 0.2s;
+      }
+      .input-field:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+      }
+      .message-box {
+        background-color: #eff6ff; /* blue-50 */
+        border: 1px solid #bfdbfe; /* blue-200 */
+        color: #1e40af; /* blue-800 */
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-weight: 500;
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out,
+          padding 0.3s ease-in-out;
+      }
+      .message-box.show {
+        opacity: 1;
+        max-height: 100px; /* Sufficient height to show content */
+        padding: 1rem;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border-radius: 9999px; /* full rounded */
+        font-weight: 600;
+        color: #ffffff;
+        background-color: #10b981; /* emerald-500 */
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+      .badge.gold {
+        background-color: #f59e0b; /* amber-500 */
+      }
+      .badge.silver {
+        background-color: #9ca3af; /* gray-400 */
+      }
+      .badge.bronze {
+        background-color: #b45309; /* orange-700 */
+      }
+
+      /* Actual Map Styles */
+      #map {
+        width: 100%;
+        height: 400px;
+        background-color: #e0f2f7; /* light blue */
+        border-radius: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid #a7d9eb;
+      }
+      .trash-can-marker-content {
+        text-align: center;
+        font-weight: bold;
+        color: #dc2626; /* red-600 */
+      }
+      .info-window-image {
+        max-width: 100px;
+        max-height: 100px;
+        border-radius: 0.5rem;
+        margin-top: 0.5rem;
+      }
+
+      /* Specific Chat Styles */
+      .chat-message-bubble {
+        background-color: #e2e8f0; /* slategray-200 */
+        padding: 0.75rem;
+        border-radius: 0.75rem; /* rounded-xl */
+        margin-bottom: 0.5rem;
+        max-width: 80%;
+        align-self: flex-start;
+        word-wrap: break-word;
+      }
+      .chat-message-bubble.self {
+        background-color: #bfdbfe; /* blue-200 */
+        align-self: flex-end;
+      }
+      .chat-message-meta {
+        font-size: 0.75rem; /* text-xs */
+        color: #6b7280; /* gray-500 */
+        margin-top: 0.25rem;
+      }
+      .chat-input-container {
+        display: flex;
+        gap: 0.5rem;
+        padding: 1rem;
+        border-top: 1px solid #e5e7eb;
+        background-color: #f9fafb;
+      }
+
+      /* Camera/Photo Upload Styles */
+      .camera-preview-container {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4/3; /* Standard camera aspect ratio */
+        background-color: #e2e8f0;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 1rem;
+        border: 1px solid #cbd5e1;
+      }
+      .camera-preview-container video,
+      .camera-preview-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .camera-preview-container canvas {
+        display: none; /* Hidden, used for capturing frames */
+      }
+      .camera-placeholder-text {
+        color: #94a3b8;
+        font-style: italic;
+      }
+
+      /* Modal Styles */
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+      .modal.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .modal-content {
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 400px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .modal-close-button {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #6b7280;
+      }
+    </style>
+  </head>
+  <body class="p-4 sm:p-6 md:p-8">
+    <div class="container">
+      <div
+        class="p-4 bg-gray-100 border-b border-gray-200 flex items-center justify-between rounded-t-2xl"
+      >
+        <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <i
+            data-lucide="trash-2"
+            class="w-6 h-6 text-blue-700"
+            id="header-trash-icon"
+          ></i>
+          SPOTLESS
+        </h1>
+        <div
+          id="user-info"
+          class="text-sm text-gray-600 flex items-center gap-2"
+        >
+          <i data-lucide="user" class="w-4 h-4"></i>
+          <span id="user-id-display">Guest User</span>
+          <button
+            id="auth-toggle-button"
+            class="bg-purple-500 hover:bg-purple-600 text-white text-xs px-2 py-1 rounded-md transition-colors"
+          >
+            Sign In
+          </button>
+        </div>
+      </div>
+
+      <nav class="flex justify-around bg-white p-2 border-b border-gray-200">
+        <button
+          id="tab-map"
+          class="tab-button active blue"
+          onclick="showTab('map')"
+        >
+          <i data-lucide="map" class="inline-block mr-2 w-5 h-5"></i>
+          Map & Routes
+        </button>
+        <button
+          id="tab-mark-can"
+          class="tab-button"
+          onclick="showTab('mark-can')"
+        >
+          <i data-lucide="plus-circle" class="inline-block mr-2 w-5 h-5"></i>
+          Mark Trash Can
+        </button>
+        <button id="tab-chat" class="tab-button" onclick="showTab('chat')">
+          <i data-lucide="message-square" class="inline-block mr-2 w-5 h-5"></i>
+          Community Chat
+        </button>
+        <button
+          id="tab-progress"
+          class="tab-button"
+          onclick="showTab('progress')"
+        >
+          <i data-lucide="award" class="inline-block mr-2 w-5 h-5"></i>
+          My Progress
+        </button>
+      </nav>
+
+      <div class="flex-grow p-6 overflow-y-auto">
+        <div id="message-box" class="message-box"></div>
+
+        <div id="content-map" class="tab-content">
+          <h2
+            class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2"
+          >
+            <i data-lucide="map-pin" class="w-5 h-5"></i>
+            Discover Trash Cans
+          </h2>
+          <!-- Google Map div -->
+          <div id="map"></div>
+
+          <div class="bg-gray-50 p-5 rounded-xl shadow-sm">
+            <h3
+              class="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2"
+            >
+              <i data-lucide="route" class="w-5 h-5"></i>
+              Plan Your Route
+            </h3>
+            <form id="plan-route-form" class="space-y-4">
+              <div>
+                <label
+                  for="route-start"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Start Point (Lat, Lon) or "My Location"</label
+                >
+                <input
+                  type="text"
+                  id="route-start"
+                  placeholder="e.g., My Location or 34.0522, -118.2437"
+                  class="input-field"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="route-end"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >End Point (Lat, Lon) or "Trash Can ID"</label
+                >
+                <input
+                  type="text"
+                  id="route-end"
+                  placeholder="e.g., Trash Can ID: abc123 or 34.0530, -118.2400"
+                  class="input-field"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn-primary">
+                <i data-lucide="map" class="w-5 h-5"></i>
+                Show Route
+              </button>
+            </form>
+            <div
+              id="route-display"
+              class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-800 hidden"
+            >
+              <h4 class="font-semibold text-base mb-2">Route Details:</h4>
+              <p id="route-details-text"></p>
+            </div>
+          </div>
+        </div>
+
+        <div id="content-mark-can" class="tab-content hidden">
+          <h2
+            class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2"
+          >
+            <i data-lucide="plus-circle" class="w-5 h-5"></i>
+            Mark a New Trash Can
+          </h2>
+          <div class="bg-gray-50 p-5 rounded-xl mb-6 shadow-sm">
+            <form id="mark-can-form" class="space-y-4">
+              <div>
+                <label
+                  for="can-address"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Address</label
+                >
+                <input
+                  type="text"
+                  id="can-address"
+                  placeholder="e.g., 1600 Amphitheatre Parkway, Mountain View, CA"
+                  class="input-field"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="can-desc"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Description (e.g., near park bench)</label
+                >
+                <textarea
+                  id="can-desc"
+                  rows="2"
+                  placeholder="Brief description of the trash can location"
+                  class="input-field"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="border-t border-gray-200 pt-4 mt-4">
+                <h4
+                  class="text-base font-semibold text-gray-700 mb-2 flex items-center gap-1"
+                >
+                  <i data-lucide="camera" class="w-4 h-4"></i> Add a Photo
+                  (Optional)
+                </h4>
+                <div
+                  class="camera-preview-container hidden"
+                  id="camera-preview-container"
+                >
+                  <video
+                    id="camera-feed"
+                    class="hidden"
+                    autoplay
+                    playsinline
+                  ></video>
+                  <canvas id="photo-canvas" class="hidden"></canvas>
+                  <img id="photo-preview" class="hidden" alt="Photo preview" />
+                  <p
+                    id="camera-placeholder-text"
+                    class="camera-placeholder-text"
+                  >
+                    No camera active / No photo taken
+                  </p>
+                </div>
+                <div class="flex gap-2 mt-3">
+                  <button
+                    type="button"
+                    id="start-camera-btn"
+                    class="btn-primary flex-1"
+                  >
+                    <i data-lucide="video" class="w-5 h-5"></i> Activate Camera
+                  </button>
+                  <button
+                    type="button"
+                    id="take-photo-btn"
+                    class="btn-primary flex-1 hidden"
+                    disabled
+                  >
+                    <i data-lucide="camera" class="w-5 h-5"></i> Take Photo
+                  </button>
+                  <input
+                    type="file"
+                    id="upload-photo-input"
+                    accept="image/*"
+                    class="hidden"
+                  />
+                  <button
+                    type="button"
+                    id="upload-photo-btn"
+                    class="btn-primary flex-1"
+                  >
+                    <i data-lucide="upload" class="w-5 h-5"></i> Upload Photo
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-primary w-full mt-4">
+                <i data-lucide="check-circle" class="w-5 h-5"></i>
+                Mark Trash Can
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div id="content-chat" class="tab-content hidden h-full flex flex-col">
+          <h2
+            class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2"
+          >
+            <i data-lucide="messages-square" class="w-5 h-5"></i>
+            Community Chat Board
+          </h2>
+          <div
+            id="general-chat-messages"
+            class="flex-grow bg-gray-50 p-4 rounded-xl overflow-y-auto mb-4 border border-gray-200 flex flex-col items-start"
+            style="min-height: 300px"
+          >
+            <p class="text-gray-500 text-sm italic">
+              No messages yet. Be the first to say hello!
+            </p>
+          </div>
+          <div class="chat-input-container">
+            <input
+              type="text"
+              id="general-chat-input"
+              placeholder="Type your message here..."
+              class="input-field flex-grow"
+            />
+            <button
+              id="send-general-message-btn"
+              class="btn-primary flex-shrink-0"
+            >
+              <i data-lucide="send" class="w-5 h-5"></i>
+              Send
+            </button>
+          </div>
+
+          <div id="specific-chat-section" class="mt-6 hidden">
+            <h3
+              class="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2"
+            >
+              <i data-lucide="message-circle" class="w-5 h-5"></i>
+              Chat for Trash Can:
+              <span id="specific-chat-can-id" class="font-bold"></span>
+            </h3>
+            <div
+              id="specific-chat-messages"
+              class="bg-gray-50 p-4 rounded-xl overflow-y-auto mb-4 border border-gray-200 flex flex-col items-start"
+              style="min-height: 200px"
+            >
+              <p class="text-gray-500 text-sm italic">
+                Select a trash can from the map to view its specific chat.
+              </p>
+            </div>
+            <div class="chat-input-container">
+              <input
+                type="text"
+                id="specific-chat-input"
+                placeholder="Type your message for this trash can..."
+                class="input-field flex-grow"
+              />
+              <button
+                id="send-specific-message-btn"
+                class="btn-primary flex-shrink-0"
+              >
+                <i data-lucide="send" class="w-5 h-5"></i>
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="content-progress" class="tab-content hidden">
+          <h2
+            class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2"
+          >
+            <i data-lucide="activity" class="w-5 h-5"></i>
+            Your Activity & Achievements
+          </h2>
+          <div class="bg-gray-50 p-5 rounded-xl shadow-sm space-y-4">
+            <div>
+              <h3
+                class="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2"
+              >
+                <i data-lucide="compass" class="w-5 h-5"></i>
+                Walking Metrics
+              </h3>
+              <p class="text-gray-600">
+                Total Distance Walked:
+                <span id="total-distance" class="font-bold text-blue-700"
+                  >0 km</span
+                >
+              </p>
+              <p class="text-gray-600">
+                Unique Trash Cans Visited:
+                <span id="visited-cans-count" class="font-bold text-blue-700"
+                  >0</span
+                >
+              </p>
+              <p class="text-gray-600">
+                New Trash Cans Marked:
+                <span id="marked-cans-count" class="font-bold text-blue-700"
+                  >0</span
+                >
+              </p>
+              <p class="text-gray-600">
+                Photos Uploaded:
+                <span id="photos-taken-count" class="font-bold text-blue-700"
+                  >0</span
+                >
+              </p>
+              <p class="text-gray-600">
+                Community Comments:
+                <span id="comments-count" class="font-bold text-blue-700"
+                  >0</span
+                >
+              </p>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2"
+              >
+                <i data-lucide="medal" class="w-5 h-5"></i>
+                Your Badges
+              </h3>
+              <div id="badges-display" class="flex flex-wrap gap-2">
+                <p class="text-gray-500 italic">
+                  No badges earned yet. Keep exploring!
+                </p>
+              </div>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2"
+              >
+                <i data-lucide="trophy" class="w-5 h-5"></i>
+                Milestones
+              </h3>
+              <ul class="list-disc list-inside text-gray-600">
+                <li>"New Trash Cans Visited" (3 unique cans)</li>
+                <li>"Trash Can Most Frequented" (Visit any can 5 times)</li>
+                <li>"New Trash Cans Marked" (Mark 1 new can)</li>
+                <li>"Photo Enthusiast" (Upload 5 photos)</li>
+                <li>"Community Contributor" (Make 10 comments)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Authentication Modal -->
+    <div id="auth-modal" class="modal">
+      <div class="modal-content">
+        <button class="modal-close-button" id="close-auth-modal">
+          &times;
+        </button>
+        <div class="space-y-4">
+          <div>
+            <label
+              for="auth-email"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Email</label
+            >
+            <input
+              type="email"
+              id="auth-email"
+              placeholder="Enter your email"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label
+              for="auth-password"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Password</label
+            >
+            <input
+              type="password"
+              id="auth-password"
+              placeholder="Enter your password"
+              class="input-field"
+            />
+          </div>
+          <div class="flex gap-4 mt-6">
+            <button id="auth-signin-btn" class="btn-primary flex-1 purple">
+              Sign In
+            </button>
+            <button id="auth-signup-btn" class="btn-primary flex-1 purple">
+              Sign Up
+            </button>
+          </div>
+        </div>
+        <div
+          id="auth-message"
+          class="text-sm text-center text-red-500 hidden mt-4"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Google Maps API Script -->
+    <script>
+      // Load Google Maps API with the key from config
+      function loadGoogleMapsAPI() {
+        const script = document.createElement("script");
+        const apiKey = window.GOOGLE_MAPS_API_KEY || "YOUR_API_KEY";
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+      }
+      // Load the API after Firebase config is loaded
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", loadGoogleMapsAPI);
+      } else {
+        loadGoogleMapsAPI();
+      }
+    </script>
+
+    <!-- Firebase Configuration -->
+    <script src="firebase-config.js"></script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+      import {
+        getAuth,
+        signInAnonymously,
+        signInWithCustomToken,
+        onAuthStateChanged,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+        addDoc,
+        setDoc,
+        updateDoc,
+        onSnapshot,
+        collection,
+        query,
+        where,
+        arrayUnion,
+        arrayRemove,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+      // Initialize Firebase variables (provided by Canvas environment)
+      const appId =
+        typeof __app_id !== "undefined" ? __app_id : "default-app-id";
+      const firebaseConfig =
+        typeof __firebase_config !== "undefined"
+          ? JSON.parse(__firebase_config)
+          : {};
+
+      let app;
+      let db;
+      let auth;
+      let userId = "";
+      let userDisplayName = "Guest User";
+      let currentUserData = null;
+
+      // Google Map variables
+      let map;
+      let mapMarkers = {}; // Store Google Maps Marker objects by trash can ID
+      let mapPolylines = []; // Store Google Maps Polyline objects for routes
+      let infoWindow; // Global info window for markers
+      let geocoder; // Google Maps Geocoder service
+
+      // Camera/Photo variables
+      let mediaStream = null;
+      let capturedPhotoBase64 = null;
+
+      // Data arrays to hold real-time data
+      let trashCans = [];
+      let generalChatMessages = [];
+      let specificChatMessages = [];
+      let currentSelectedCanId = null;
+
+      // Get Auth Modal Elements
+      const authModal = document.getElementById("auth-modal");
+      const closeAuthModalBtn = document.getElementById("close-auth-modal");
+      const authEmailInput = document.getElementById("auth-email");
+      const authPasswordInput = document.getElementById("auth-password");
+      const authSignInBtn = document.getElementById("auth-signin-btn");
+      const authSignUpBtn = document.getElementById("auth-signup-btn");
+      const authMessageDiv = document.getElementById("auth-message");
+      const authToggleButton = document.getElementById("auth-toggle-button"); // Renamed from signin-button
+
+      // Helper function to show messages in the main app message box
+      function showMessage(message, type = "info") {
+        const msgBox = document.getElementById("message-box");
+        msgBox.textContent = message;
+        msgBox.className = "message-box show"; // Reset and add show class
+        if (type === "error") {
+          msgBox.classList.add("bg-red-100", "border-red-400", "text-red-700");
+        } else if (type === "success") {
+          msgBox.classList.add(
+            "bg-green-100",
+            "border-green-400",
+            "text-green-700"
+          );
+        } else {
+          msgBox.classList.add(
+            "bg-blue-100",
+            "border-blue-400",
+            "text-blue-700"
+          );
+        }
+        // Hide after 5 seconds
+        setTimeout(() => {
+          msgBox.classList.remove("show");
+          // Remove specific color classes after fade out
+          setTimeout(() => {
+            msgBox.className = "message-box"; // Reset to base
+          }, 300);
+        }, 5000);
+      }
+
+      // Helper function to show messages specifically within the auth modal
+      function showAuthMessage(message, type = "error") {
+        authMessageDiv.textContent = message;
+        authMessageDiv.classList.remove(
+          "hidden",
+          "text-red-500",
+          "text-green-500"
+        );
+        if (type === "error") {
+          authMessageDiv.classList.add("text-red-500");
+        } else {
+          authMessageDiv.classList.add("text-green-500");
+        }
+      }
+
+      // Function to open the auth modal
+      function openAuthModal() {
+        authModal.classList.add("show");
+        authMessageDiv.classList.add("hidden"); // Clear previous messages
+        authEmailInput.value = "";
+        authPasswordInput.value = "";
+      }
+
+      // Function to close the auth modal
+      function closeAuthModal() {
+        authModal.classList.remove("show");
+      }
+
+      // Function to sign out the user
+      async function signOutUser() {
+        try {
+          await signOut(auth);
+          // The onAuthStateChanged listener will handle UI updates
+          showMessage("Signed out successfully!", "success");
+        } catch (error) {
+          console.error("Error signing out:", error);
+          showMessage(`Failed to sign out: ${error.message}`, "error");
+        }
+      }
+
+      // Initialize Firebase and Authentication
+      async function initializeFirebaseApp() {
+        try {
+          app = initializeApp(firebaseConfig);
+          db = getFirestore(app);
+          auth = getAuth(app);
+
+          // --- Firebase Authentication Handling ---
+          // This listener runs whenever the user's sign-in state changes.
+          onAuthStateChanged(auth, async (user) => {
+            if (user) {
+              userId = user.uid;
+              // Determine user display name
+              userDisplayName =
+                user.email || `User: ${userId.substring(0, 8)}... (Guest)`;
+
+              const userDocRef = doc(
+                db,
+                `artifacts/${appId}/users/${userId}/profile`,
+                "data"
+              );
+              const userDocSnap = await getDoc(userDocRef);
+              if (!userDocSnap.exists()) {
+                await setDoc(userDocRef, {
+                  displayName: userDisplayName,
+                  totalDistanceWalked: 0,
+                  visitedTrashCans: [],
+                  markedTrashCans: [],
+                  frequentedTrashCans: {},
+                  photosTaken: [],
+                  comments: [],
+                  badges: [],
+                  createdAt: serverTimestamp(),
+                });
+                showMessage("New user profile created!", "success");
+              } else {
+                const userData = userDocSnap.data();
+                if (
+                  userData.displayName &&
+                  userData.displayName !== "Guest User"
+                ) {
+                  userDisplayName = userData.displayName;
+                }
+              }
+
+              document.getElementById("user-id-display").textContent =
+                userDisplayName;
+              authToggleButton.textContent = "Sign Out";
+              authToggleButton.onclick = signOutUser; // Change button to sign out
+              authToggleButton.classList.remove(
+                "bg-purple-500",
+                "hover:bg-purple-600"
+              );
+              authToggleButton.classList.add("bg-red-500", "hover:bg-red-600");
+
+              setupFirestoreListeners();
+              showTab("map");
+              lucide.createIcons();
+              closeAuthModal();
+              showMessage(`Welcome, ${userDisplayName}!`, "success");
+            } else {
+              // No user signed in or signed out
+              userId = "";
+              userDisplayName = "Guest User";
+              document.getElementById("user-id-display").textContent =
+                userDisplayName;
+              authToggleButton.textContent = "Sign In";
+              authToggleButton.onclick = openAuthModal; // Change button to sign in
+              authToggleButton.classList.remove(
+                "bg-red-500",
+                "hover:bg-red-600"
+              );
+              authToggleButton.classList.add(
+                "bg-purple-500",
+                "hover:bg-purple-600"
+              );
+
+              console.log("No user signed in. Displaying 'Sign In' option.");
+
+              // Attempt initial sign-in logic only if no user is currently authenticated
+              // and it's the very first time this listener runs in this session.
+              // This prevents endless loops if custom token is invalid or no internet.
+              const initialAuthAttemptedKey = "initialAuthAttempted_" + appId;
+              if (!sessionStorage.getItem(initialAuthAttemptedKey)) {
+                try {
+                  if (
+                    typeof __initial_auth_token !== "undefined" &&
+                    __initial_auth_token
+                  ) {
+                    console.log(
+                      "Attempting secure sign-in with custom token..."
+                    );
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                    showMessage("Signed in securely!", "success");
+                  } else {
+                    console.log(
+                      "No custom token provided. Attempting anonymous sign-in..."
+                    );
+                    await signInAnonymously(auth);
+                    showMessage("Signed in anonymously!", "info");
+                  }
+                } catch (error) {
+                  console.error("Initial sign-in attempt failed:", error);
+                  if (
+                    error.code === "auth/invalid-custom-token" ||
+                    error.code === "auth/invalid-claims"
+                  ) {
+                    console.log(
+                      "Custom token invalid. Attempting anonymous sign-in as fallback..."
+                    );
+                    try {
+                      await signInAnonymously(auth);
+                      showMessage(
+                        "Secure login failed (invalid token). Signed in anonymously.",
+                        "info"
+                      );
+                    } catch (anonError) {
+                      console.error(
+                        "Anonymous sign-in fallback failed:",
+                        anonError
+                      );
+                      showMessage(
+                        'Failed to sign in. Please check your network or use "Sign In" to register.',
+                        "error"
+                      );
+                    }
+                  } else {
+                    showMessage(
+                      `Initial sign-in failed: ${error.message}. Please use "Sign In" to register.`,
+                      "error"
+                    );
+                  }
+                } finally {
+                  // Mark that an initial authentication attempt has been made for this session.
+                  sessionStorage.setItem(initialAuthAttemptedKey, "true");
+                }
+              }
+            }
+          });
+        } catch (initializationError) {
+          console.error("Error initializing Firebase:", initializationError);
+          showMessage(
+            `Fatal Error: ${initializationError.message}. Please check Firebase config.`,
+            "error"
+          );
+        }
+      }
+
+      // Event listener for the header Auth Toggle button
+      authToggleButton.addEventListener("click", () => {
+        // This listener will be overridden by the onAuthStateChanged for signed in/out states.
+        // If it still fires here, it means no user is logged in, so open modal.
+        if (!auth.currentUser) {
+          openAuthModal();
+        } else {
+          signOutUser();
+        }
+      });
+      closeAuthModalBtn.addEventListener("click", closeAuthModal);
+
+      // Handle Email/Password Sign Up
+      authSignUpBtn.addEventListener("click", async () => {
+        const email = authEmailInput.value;
+        const password = authPasswordInput.value;
+
+        if (!email || !password) {
+          showAuthMessage("Please enter both email and password.");
+          return;
+        }
+
+        try {
+          const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          // User is automatically signed in upon creation
+          showAuthMessage("Account created and signed in!", "success");
+          // The onAuthStateChanged listener will handle UI update and profile creation
+        } catch (error) {
+          console.error("Sign Up failed:", error);
+          let errorMessage = "Sign Up failed.";
+          if (error.code === "auth/email-already-in-use") {
+            errorMessage = "Email already in use. Try signing in.";
+          } else if (error.code === "auth/weak-password") {
+            errorMessage = "Password is too weak (min 6 characters).";
+          } else if (error.code === "auth/invalid-email") {
+            errorMessage = "Invalid email address.";
+          }
+          showAuthMessage(errorMessage, "error");
+        }
+      });
+
+      // Handle Email/Password Sign In
+      authSignInBtn.addEventListener("click", async () => {
+        const email = authEmailInput.value;
+        const password = authPasswordInput.value;
+
+        if (!email || !password) {
+          showAuthMessage("Please enter both email and password.");
+          return;
+        }
+
+        try {
+          const userCredential = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          showAuthMessage("Signed in successfully!", "success");
+          // The onAuthStateChanged listener will handle UI update
+        } catch (error) {
+          console.error("Sign In failed:", error);
+          let errorMessage = "Sign In failed.";
+          if (
+            error.code === "auth/user-not-found" ||
+            error.code === "auth/wrong-password" ||
+            error.code === "auth/invalid-credential"
+          ) {
+            errorMessage = "Invalid email or password.";
+          } else if (error.code === "auth/invalid-email") {
+            errorMessage = "Invalid email address format.";
+          }
+          showAuthMessage(errorMessage, "error");
+        }
+      });
+
+      // Global function for Google Maps callback
+      window.initMap = function () {
+        // Default center: Los Angeles (example)
+        const defaultCenter = { lat: 34.0522, lng: -118.2437 };
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: defaultCenter,
+          zoom: 12,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: false,
+        });
+
+        infoWindow = new google.maps.InfoWindow();
+        geocoder = new google.maps.Geocoder(); // Initialize Geocoder
+
+        // Add listener for clicks on the map to get coordinates
+        map.addListener("click", (mapsMouseEvent) => {
+          const lat = mapsMouseEvent.latLng.lat();
+          const lon = mapsMouseEvent.latLng.lng();
+          showMessage(
+            `Map clicked at: Lat ${lat.toFixed(6)}, Lon ${lon.toFixed(
+              6
+            )}. You can use these for route planning or marking a can.`,
+            "info"
+          );
+        });
+        console.log("Google Map initialized.");
+      };
+
+      // Set up real-time Firestore listeners
+      function setupFirestoreListeners() {
+        // Listen for trash cans
+        const trashCansColRef = collection(
+          db,
+          `artifacts/${appId}/public/data/trash_cans`
+        );
+        onSnapshot(
+          trashCansColRef,
+          (snapshot) => {
+            trashCans = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+            displayTrashCansOnMap(); // Re-render map markers
+            console.log("Trash cans updated:", trashCans);
+          },
+          (error) => {
+            console.error("Error fetching trash cans:", error);
+            // Provide user-friendly message for permission errors
+            if (error.code === "permission-denied") {
+              showMessage(
+                "Error loading trash cans: Missing or insufficient Firestore permissions. Please check your Firebase Security Rules.",
+                "error"
+              );
+            } else {
+              showMessage(
+                `Error loading trash cans: ${error.message}`,
+                "error"
+              );
+            }
+          }
+        );
+
+        // Listen for general chat messages
+        const generalChatColRef = collection(
+          db,
+          `artifacts/${appId}/public/data/general_chat`
+        );
+        const generalChatQuery = query(generalChatColRef);
+        onSnapshot(
+          generalChatQuery,
+          (snapshot) => {
+            generalChatMessages = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+            displayChatMessages("general");
+            console.log("General chat updated:", generalChatMessages);
+          },
+          (error) => {
+            console.error("Error fetching general chat:", error);
+            if (error.code === "permission-denied") {
+              showMessage(
+                "Error loading general chat: Missing or insufficient Firestore permissions. Please check your Firebase Security Rules.",
+                "error"
+              );
+            } else {
+              showMessage(
+                `Error loading general chat: ${error.message}`,
+                "error"
+              );
+            }
+          }
+        );
+
+        // Listen for current user's data
+        const userDocRef = doc(
+          db,
+          `artifacts/${appId}/users/${userId}/profile`,
+          "data"
+        );
+        onSnapshot(
+          userDocRef,
+          (docSnap) => {
+            if (docSnap.exists()) {
+              currentUserData = docSnap.data();
+              displayUserProgress();
+              checkAndAwardBadges();
+              console.log("User data updated:", currentUserData);
+            } else {
+              console.log("Current user document does not exist yet.");
+            }
+          },
+          (error) => {
+            console.error("Error fetching user data:", error);
+            if (error.code === "permission-denied") {
+              showMessage(
+                "Error loading user data: Missing or insufficient Firestore permissions. Please check your Firebase Security Rules.",
+                "error"
+              );
+            } else {
+              showMessage(`Error loading user data: ${error.message}`, "error");
+            }
+          }
+        );
+      }
+
+      // Function to display chat messages for a given type (general or specific)
+      function displayChatMessages(type) {
+        const chatMessagesContainer =
+          type === "general"
+            ? document.getElementById("general-chat-messages")
+            : document.getElementById("specific-chat-messages");
+        const messages =
+          type === "general" ? generalChatMessages : specificChatMessages;
+
+        chatMessagesContainer.innerHTML = ""; // Clear previous messages
+
+        if (messages.length === 0) {
+          chatMessagesContainer.innerHTML = `<p class="text-gray-500 text-sm italic">No messages yet. Be the first to say hello!</p>`;
+          return;
+        }
+
+        // Sort messages by timestamp if available (ascending)
+        messages.sort(
+          (a, b) => (a.timestamp?.toDate() || 0) - (b.timestamp?.toDate() || 0)
+        );
+
+        messages.forEach((msg) => {
+          const isSelf = msg.userId === userId;
+          const messageBubble = document.createElement("div");
+          messageBubble.className = `chat-message-bubble ${
+            isSelf ? "self" : ""
+          }`;
+
+          const userName = document.createElement("div");
+          userName.className = "font-semibold text-sm mb-1";
+          userName.textContent = msg.userDisplayName || "Unknown User";
+
+          const messageText = document.createElement("div");
+          messageText.textContent = msg.message;
+
+          const timestampText = document.createElement("div");
+          timestampText.className = "chat-message-meta";
+          if (msg.timestamp) {
+            const date = msg.timestamp.toDate();
+            timestampText.textContent = date.toLocaleString();
+          } else {
+            timestampText.textContent = "Just now";
+          }
+
+          messageBubble.appendChild(userName);
+          messageBubble.appendChild(messageText);
+          messageBubble.appendChild(timestampText);
+
+          chatMessagesContainer.appendChild(messageBubble);
+        });
+
+        // Scroll to bottom
+        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+      }
+
+      // Function to display trash cans on the actual Google Map
+      function displayTrashCansOnMap() {
+        // Clear existing markers
+        for (const canId in mapMarkers) {
+          mapMarkers[canId].setMap(null); // Remove marker from map
+        }
+        mapMarkers = {}; // Reset markers object
+
+        trashCans.forEach((can) => {
+          const position = { lat: can.latitude, lng: can.longitude };
+          const marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            icon: {
+              url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png", // Red dot icon
+              scaledSize: new google.maps.Size(32, 32),
+            },
+            title: can.description || "Trash Can",
+          });
+
+          // Content for the InfoWindow
+          let infoContent = `
+                    <div class="trash-can-marker-content">
+                        <strong>Trash Can ID:</strong> ${can.id.substring(
+                          0,
+                          8
+                        )}...<br>
+                        <strong>Description:</strong> ${
+                          can.description || "N/A"
+                        }<br>
+                        <strong>Marked by:</strong> ${
+                          can.markedByUserDisplayName || "Unknown"
+                        }<br>
+                `;
+          if (can.imageUrl) {
+            infoContent += `<img src="${can.imageUrl}" alt="Trash Can Photo" class="info-window-image">`;
+          }
+          infoContent += `<br><button onclick="window.selectTrashCanForChat('${can.id}')" class="btn-primary p-2 text-sm rounded-md mt-2">View Chat</button></div>`;
+
+          marker.addListener("click", () => {
+            infoWindow.setContent(infoContent);
+            infoWindow.open(map, marker);
+            // Simulate visiting a trash can when marker is clicked
+            trackVisitedCan(can.id);
+          });
+
+          mapMarkers[can.id] = marker; // Store marker reference
+        });
+      }
+
+      // Handle marking a new trash can
+      document
+        .getElementById("mark-can-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const address = document.getElementById("can-address").value.trim();
+          const desc = document.getElementById("can-desc").value.trim();
+
+          if (!address) {
+            showMessage("Please enter an address.", "error");
+            return;
+          }
+          if (!desc) {
+            showMessage("Please enter a description.", "error");
+            return;
+          }
+
+          // Geocode the address to get latitude and longitude using Google Maps Geocoder
+          geocoder.geocode({ address: address }, async (results, status) => {
+            if (status === "OK" && results[0]) {
+              const lat = results[0].geometry.location.lat();
+              const lon = results[0].geometry.location.lng();
+
+              if (!capturedPhotoBase64) {
+                showMessage(
+                  "No photo provided, marking trash can without an image.",
+                  "info"
+                );
+              }
+
+              try {
+                await addDoc(
+                  collection(db, `artifacts/${appId}/public/data/trash_cans`),
+                  {
+                    latitude: lat,
+                    longitude: lon,
+                    address: address, // Store the address too
+                    description: desc,
+                    markedByUserId: userId,
+                    markedByUserDisplayName: userDisplayName,
+                    imageUrl: capturedPhotoBase64 || null, // Store Base64 image
+                    createdAt: serverTimestamp(),
+                  }
+                );
+
+                // Update user's marked cans count
+                const userDocRef = doc(
+                  db,
+                  `artifacts/${appId}/users/${userId}/profile`,
+                  "data"
+                );
+                await updateDoc(userDocRef, {
+                  markedTrashCans: arrayUnion(userId + "_" + Date.now()), // Unique ID for each marked action
+                });
+
+                showMessage("Trash can marked successfully!", "success");
+                document.getElementById("mark-can-form").reset();
+                // Reset camera/photo preview
+                resetCameraAndPhotoPreview();
+              } catch (error) {
+                console.error("Error marking trash can:", error);
+                if (error.code === "permission-denied") {
+                  showMessage(
+                    "Failed to mark trash can: Missing or insufficient Firestore permissions. Please check your Firebase Security Rules.",
+                    "error"
+                  );
+                } else {
+                  showMessage(
+                    `Failed to mark trash can: ${error.message}`,
+                    "error"
+                  );
+                }
+              }
+            } else {
+              showMessage(
+                "Geocoding failed: " + status + ". Please check the address.",
+                "error"
+              );
+            }
+          });
+        });
+
+      // Handle route planning
+      document
+        .getElementById("plan-route-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const startInput = document
+            .getElementById("route-start")
+            .value.trim();
+          const endInput = document.getElementById("route-end").value.trim();
+          const routeDisplay = document.getElementById("route-display");
+          const routeDetailsText =
+            document.getElementById("route-details-text");
+
+          // Clear previous polyline routes
+          mapPolylines.forEach((polyline) => polyline.setMap(null));
+          mapPolylines = [];
+          if (infoWindow) {
+            infoWindow.close(); // Close any open info window
+          }
+
+          let startCoords = null,
+            endCoords = null;
+
+          // Function to geocode an address/ID and return coordinates
+          const getCoords = (input, isStart = true) =>
+            new Promise(async (resolve, reject) => {
+              if (input.toLowerCase() === "my location") {
+                // Simulate current location as map center
+                resolve(map.getCenter());
+              } else if (input.toLowerCase().startsWith("trash can id:")) {
+                const canId = input.substring("trash can id:".length).trim();
+                const targetCan = trashCans.find((can) => can.id === canId);
+                if (targetCan) {
+                  resolve({
+                    lat: targetCan.latitude,
+                    lng: targetCan.longitude,
+                  });
+                  if (!isStart) trackVisitedCan(canId); // Track if it's the end point
+                } else {
+                  reject("Trash Can ID not found.");
+                }
+              } else {
+                // Assume it's lat,lon directly
+                const parts = input.split(",").map((p) => parseFloat(p.trim()));
+                if (
+                  parts.length === 2 &&
+                  !isNaN(parts[0]) &&
+                  !isNaN(parts[1])
+                ) {
+                  resolve({ lat: parts[0], lng: parts[1] });
+                } else {
+                  // Attempt geocoding if not direct coordinates
+                  geocoder.geocode({ address: input }, (results, status) => {
+                    if (status === "OK" && results[0]) {
+                      resolve(results[0].geometry.location);
+                    } else {
+                      reject(`Geocoding failed for "${input}": ${status}`);
+                    }
+                  });
+                }
+              }
+            });
+
+          try {
+            startCoords = await getCoords(startInput, true);
+            endCoords = await getCoords(endInput, false);
+          } catch (error) {
+            showMessage(`Error getting coordinates: ${error}`, "error");
+            return;
+          }
+
+          // Simulate route calculation and display on Google Map
+          const distance = calculateDistance(
+            startCoords.lat(),
+            startCoords.lng(),
+            endCoords.lat(),
+            endCoords.lng()
+          );
+          const routeInstructions = `Walk ${distance.toFixed(
+            2
+          )} km. Start at Lat: ${startCoords
+            .lat()
+            .toFixed(4)}, Lon: ${startCoords
+            .lng()
+            .toFixed(4)}. End at Lat: ${endCoords
+            .lat()
+            .toFixed(4)}, Lon: ${endCoords.lng().toFixed(4)}.`;
+
+          routeDetailsText.textContent = routeInstructions;
+          routeDisplay.classList.remove("hidden");
+
+          // Update user's total distance walked
+          if (currentUserData) {
+            const userDocRef = doc(
+              db,
+              `artifacts/${appId}/users/${userId}/profile`,
+              "data"
+            );
+            await updateDoc(userDocRef, {
+              totalDistanceWalked:
+                (currentUserData.totalDistanceWalked || 0) + distance,
+            });
+          }
+
+          // Draw polyline on the map
+          const routePath = new google.maps.Polyline({
+            path: [startCoords, endCoords],
+            geodesic: true,
+            strokeColor: "#3b82f6", // blue-500
+            strokeOpacity: 0.8,
+            strokeWeight: 4,
+            map: map,
+          });
+          mapPolylines.push(routePath); // Store for clearing later
+
+          // Fit map to route bounds
+          const bounds = new google.maps.LatLngBounds();
+          bounds.extend(startCoords);
+          bounds.extend(endCoords);
+          map.fitBounds(bounds);
+          map.setZoom(Math.min(map.getZoom(), 15)); // Don't zoom too close if points are far
+
+          showMessage("Route planned!", "success");
+        });
+
+      // Simple Haversine distance calculation (approximation)
+      function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Radius of Earth in kilometers
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos((lat1 * Math.PI) / 180) *
+            Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Distance in km
+      }
+
+      // Track a visited trash can
+      async function trackVisitedCan(canId) {
+        if (!currentUserData) return;
+
+        const userDocRef = doc(
+          db,
+          `artifacts/${appId}/users/${userId}/profile`,
+          "data"
+        );
+
+        // Update visitedTrashCans (unique list)
+        const visitedCans = new Set(currentUserData.visitedTrashCans || []);
+        if (!visitedCans.has(canId)) {
+          visitedCans.add(canId);
+          await updateDoc(userDocRef, {
+            visitedTrashCans: Array.from(visitedCans),
+          });
+          showMessage(`You visited a new trash can! ID: ${canId}`, "info");
+        }
+
+        // Update frequentedTrashCans (count for each can)
+        const frequentedCans = currentUserData.frequentedTrashCans || {};
+        frequentedCans[canId] = (frequentedCans[canId] || 0) + 1;
+        await updateDoc(userDocRef, {
+          frequentedTrashCans: frequentedCans,
+        });
+
+        checkAndAwardBadges(); // Re-check badges after update
+      }
+
+      // Display user progress (distance, visited cans, marked cans, badges)
+      function displayUserProgress() {
+        if (!currentUserData) {
+          document.getElementById("total-distance").textContent = "Loading...";
+          document.getElementById("visited-cans-count").textContent =
+            "Loading...";
+          document.getElementById("marked-cans-count").textContent =
+            "Loading...";
+          document.getElementById("photos-taken-count").textContent =
+            "Loading...";
+          document.getElementById("comments-count").textContent = "Loading...";
+          document.getElementById("badges-display").innerHTML =
+            '<p class="text-gray-500 italic">No badges earned yet. Keep exploring!</p>';
+          return;
+        }
+
+        document.getElementById("total-distance").textContent = `${(
+          currentUserData.totalDistanceWalked || 0
+        ).toFixed(2)} km`;
+        document.getElementById("visited-cans-count").textContent = (
+          currentUserData.visitedTrashCans || []
+        ).length;
+        document.getElementById("marked-cans-count").textContent = (
+          currentUserData.markedTrashCans || []
+        ).length;
+        document.getElementById("photos-taken-count").textContent = (
+          currentUserData.photosTaken || []
+        ).length;
+        document.getElementById("comments-count").textContent = (
+          currentUserData.comments || []
+        ).length;
+
+        const badgesDisplay = document.getElementById("badges-display");
+        badgesDisplay.innerHTML = ""; // Clear previous badges
+
+        if ((currentUserData.badges || []).length === 0) {
+          badgesDisplay.innerHTML =
+            '<p class="text-gray-500 italic">No badges earned yet. Keep exploring!</p>';
+        } else {
+          currentUserData.badges.forEach((badgeName) => {
+            const badgeDiv = document.createElement("div");
+            let badgeClass = "badge";
+            if (badgeName.includes("Most Frequented")) badgeClass += " gold";
+            else if (badgeName.includes("New Trash Cans Visited"))
+              badgeClass += " silver";
+            else if (badgeName.includes("New Trash Cans Marked"))
+              badgeClass += " bronze";
+            badgeDiv.className = badgeClass;
+            badgeDiv.innerHTML = `<i data-lucide="award" class="mr-1 w-4 h-4"></i> ${badgeName}`;
+            badgesDisplay.appendChild(badgeDiv);
+          });
+          lucide.createIcons(); // Re-render Lucide icons
+        }
+      }
+
+      // Logic for awarding badges
+      async function checkAndAwardBadges() {
+        if (!currentUserData) return;
+
+        const userDocRef = doc(
+          db,
+          `artifacts/${appId}/users/${userId}/profile`,
+          "data"
+        );
+        let updatedBadges = new Set(currentUserData.badges || []);
+        let badgesAwarded = false;
+
+        // "New Trash Cans Visited" (3 unique cans)
+        if (
+          (currentUserData.visitedTrashCans || []).length >= 3 &&
+          !updatedBadges.has("New Trash Cans Visited")
+        ) {
+          updatedBadges.add("New Trash Cans Visited");
+          showMessage(
+            'Congratulations! You earned "New Trash Cans Visited" badge!',
+            "success"
+          );
+          badgesAwarded = true;
+        }
+
+        // "Trash Can Most Frequented" (Visit any can 5 times)
+        const frequentedCans = currentUserData.frequentedTrashCans || {};
+        const hasFrequentedBadge = Object.values(frequentedCans).some(
+          (count) => count >= 5
+        );
+        if (
+          hasFrequentedBadge &&
+          !updatedBadges.has("Trash Can Most Frequented")
+        ) {
+          updatedBadges.add("Trash Can Most Frequented"); // Fixed typo in badge name
+          showMessage(
+            'Amazing! You earned "Trash Can Most Frequented" badge!',
+            "success"
+          );
+          badgesAwarded = true;
+        }
+
+        // "New Trash Cans Marked" (Mark 1 new can)
+        if (
+          (currentUserData.markedTrashCans || []).length >= 1 &&
+          !updatedBadges.has("New Trash Cans Marked")
+        ) {
+          updatedBadges.add("New Trash Cans Marked");
+          showMessage(
+            'Great job! You earned "New Trash Cans Marked" badge!',
+            "success"
+          );
+          badgesAwarded = true;
+        }
+
+        // "Photo Enthusiast" (Upload 5 photos)
+        if (
+          (currentUserData.photosTaken || []).length >= 5 &&
+          !updatedBadges.has("Photo Enthusiast")
+        ) {
+          updatedBadges.add("Photo Enthusiast");
+          showMessage(
+            'Amazing! You earned "Photo Enthusiast" badge!',
+            "success"
+          );
+          badgesAwarded = true;
+        }
+
+        // "Community Contributor" (Make 10 comments)
+        if (
+          (currentUserData.comments || []).length >= 10 &&
+          !updatedBadges.has("Community Contributor")
+        ) {
+          updatedBadges.add("Community Contributor");
+          showMessage(
+            'Outstanding! You earned "Community Contributor" badge!',
+            "success"
+          );
+          badgesAwarded = true;
+        }
+
+        if (badgesAwarded) {
+          await updateDoc(userDocRef, {
+            badges: Array.from(updatedBadges),
+          });
+        }
+      }
+
+      // Handle general chat message sending
+      document
+        .getElementById("send-general-message-btn")
+        .addEventListener("click", async () => {
+          const chatInput = document.getElementById("general-chat-input");
+          const message = chatInput.value.trim();
+
+          if (!message) {
+            showMessage("Message cannot be empty.", "error");
+            return;
+          }
+
+          try {
+            await addDoc(
+              collection(db, `artifacts/${appId}/public/data/general_chat`),
+              {
+                userId: userId,
+                userDisplayName: userDisplayName,
+                message: message,
+                timestamp: serverTimestamp(),
+              }
+            );
+
+            // Track comment made
+            if (currentUserData) {
+              const userDocRef = doc(
+                db,
+                `artifacts/${appId}/users/${userId}/profile`,
+                "data"
+              );
+              updateDoc(userDocRef, {
+                comments: arrayUnion(Date.now().toString()), // Add timestamp as unique identifier
+              });
+            }
+
+            chatInput.value = ""; // Clear input
+          } catch (error) {
+            console.error("Error sending general message:", error);
+            if (error.code === "permission-denied") {
+              showMessage(
+                "Failed to send message: Missing or insufficient Firestore permissions. Please check your Firebase Security Rules.",
+                "error"
+              );
+            } else {
+              showMessage(`Failed to send message: ${error.message}`, "error");
+            }
+          }
+        });
+
+      // Handle specific chat message sending
+      document
+        .getElementById("send-specific-message-btn")
+        .addEventListener("click", async () => {
+          if (!currentSelectedCanId) {
+            showMessage(
+              "Please select a trash can to chat about first.",
+              "error"
+            );
+            return;
+          }
+
+          const chatInput = document.getElementById("specific-chat-input");
+          const message = chatInput.value.trim();
+
+          if (!message) {
+            showMessage("Message cannot be empty.", "error");
+            return;
+          }
+
+          try {
+            // Path: artifacts/{appId}/public/data/trash_cans/{canId}/can_chats
+            await addDoc(
+              collection(
+                db,
+                `artifacts/${appId}/public/data/trash_cans/${currentSelectedCanId}/can_chats`
+              ),
+              {
+                userId: userId,
+                userDisplayName: userDisplayName,
+                message: message,
+                timestamp: serverTimestamp(),
+              }
+            );
+
+            // Track comment made
+            if (currentUserData) {
+              const userDocRef = doc(
+                db,
+                `artifacts/${appId}/users/${userId}/profile`,
+                "data"
+              );
+              updateDoc(userDocRef, {
+                comments: arrayUnion(Date.now().toString()), // Add timestamp as unique identifier
+              });
+            }
+
+            chatInput.value = ""; // Clear input
+          } catch (error) {
+            console.error(
+              `Error sending message for can ${currentSelectedCanId}:`,
+              error
+            );
+            if (error.code === "permission-denied") {
+              showMessage(
+                "Failed to send message for this can: Missing or insufficient Firestore permissions. Please check your Firebase Security Rules.",
+                "error"
+              );
+            } else {
+              showMessage(
+                `Failed to send message for this can: ${error.message}`,
+                "error"
+              );
+            }
+          }
+        });
+
+      // Function to select a trash can and load its specific chat
+      window.selectTrashCanForChat = function (canId) {
+        // Made global for onclick in info window
+        currentSelectedCanId = canId;
+        document.getElementById("specific-chat-can-id").textContent =
+          canId.substring(0, 8) + "...";
+        document
+          .getElementById("specific-chat-section")
+          .classList.remove("hidden");
+
+        // Set up a listener for this specific trash can's chat
+        const specificChatColRef = collection(
+          db,
+          `artifacts/${appId}/public/data/trash_cans/${canId}/can_chats`
+        );
+        const specificChatQuery = query(specificChatColRef);
+
+        // Detach previous specific chat listener if any (important for memory)
+        if (window.currentSpecificChatUnsubscribe) {
+          window.currentSpecificChatUnsubscribe();
+        }
+
+        window.currentSpecificChatUnsubscribe = onSnapshot(
+          specificChatQuery,
+          (snapshot) => {
+            specificChatMessages = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+            displayChatMessages("specific");
+            console.log(
+              `Specific chat for ${canId} updated:`,
+              specificChatMessages
+            );
+          },
+          (error) => {
+            console.error(`Error fetching specific chat for ${canId}:`, error);
+            if (error.code === "permission-denied") {
+              showMessage(
+                `Error loading chat for can ${canId}: Missing or insufficient Firestore permissions. Please check your Firebase Security Rules.`,
+                "error"
+              );
+            } else {
+              showMessage(
+                `Error loading chat for can ${canId}: ${error.message}`,
+                "error"
+              );
+            }
+          }
+        );
+
+        // Switch to chat tab if not already there
+        showTab("chat");
+        document.getElementById("general-chat-messages").style.minHeight =
+          "150px"; // Adjust height for two chat sections
+      };
+
+      // --- Camera and Photo Functionality ---
+      const cameraFeed = document.getElementById("camera-feed");
+      const photoCanvas = document.getElementById("photo-canvas");
+      const photoPreview = document.getElementById("photo-preview");
+      const cameraPlaceholderText = document.getElementById(
+        "camera-placeholder-text"
+      );
+      const startCameraBtn = document.getElementById("start-camera-btn");
+      const takePhotoBtn = document.getElementById("take-photo-btn");
+      const uploadPhotoInput = document.getElementById("upload-photo-input");
+      const uploadPhotoBtn = document.getElementById("upload-photo-btn");
+      const context = photoCanvas.getContext("2d");
+
+      startCameraBtn.addEventListener("click", async () => {
+        try {
+          if (mediaStream) {
+            // If camera is already active, stop it
+            mediaStream.getTracks().forEach((track) => track.stop());
+          }
+          mediaStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "environment" },
+          }); // Prefer rear camera
+
+          // Show the camera preview container
+          document
+            .getElementById("camera-preview-container")
+            .classList.remove("hidden");
+
+          cameraFeed.srcObject = mediaStream;
+          cameraFeed.classList.remove("hidden");
+          photoPreview.classList.add("hidden");
+          cameraPlaceholderText.classList.add("hidden");
+          takePhotoBtn.classList.remove("hidden");
+          takePhotoBtn.disabled = false;
+          startCameraBtn.textContent = "Stop Camera"; // Change button text
+          showMessage("Camera activated!", "success");
+        } catch (err) {
+          console.error("Error accessing camera:", err);
+          showMessage(
+            "Could not access camera. Please ensure permissions are granted.",
+            "error"
+          );
+          takePhotoBtn.disabled = true;
+        }
+      });
+
+      takePhotoBtn.addEventListener("click", () => {
+        if (mediaStream) {
+          photoCanvas.width = cameraFeed.videoWidth;
+          photoCanvas.height = cameraFeed.videoHeight;
+          context.drawImage(
+            cameraFeed,
+            0,
+            0,
+            photoCanvas.width,
+            photoCanvas.height
+          );
+          capturedPhotoBase64 = photoCanvas.toDataURL("image/png"); // Get image as Base64
+          photoPreview.src = capturedPhotoBase64;
+          photoPreview.classList.remove("hidden");
+          cameraFeed.classList.add("hidden");
+          cameraPlaceholderText.classList.add("hidden");
+
+          // Track photo taken
+          if (currentUserData) {
+            const userDocRef = doc(
+              db,
+              `artifacts/${appId}/users/${userId}/profile`,
+              "data"
+            );
+            updateDoc(userDocRef, {
+              photosTaken: arrayUnion(Date.now().toString()), // Add timestamp as unique identifier
+            });
+          }
+
+          showMessage("Photo captured!", "success");
+          // Optionally stop camera after taking photo
+          if (mediaStream) {
+            mediaStream.getTracks().forEach((track) => track.stop());
+            mediaStream = null;
+            startCameraBtn.textContent = "Activate Camera";
+            takePhotoBtn.classList.add("hidden");
+          }
+        } else {
+          showMessage("No camera stream active to take a photo.", "error");
+        }
+      });
+
+      uploadPhotoBtn.addEventListener("click", () => {
+        uploadPhotoInput.click(); // Trigger file input click
+      });
+
+      uploadPhotoInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          // Show the camera preview container
+          document
+            .getElementById("camera-preview-container")
+            .classList.remove("hidden");
+
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            capturedPhotoBase64 = e.target.result;
+            photoPreview.src = capturedPhotoBase64;
+            photoPreview.classList.remove("hidden");
+            cameraFeed.classList.add("hidden");
+            cameraPlaceholderText.classList.add("hidden");
+            takePhotoBtn.classList.add("hidden"); // Hide take photo button for uploaded image
+            if (mediaStream) {
+              // Stop camera if active
+              mediaStream.getTracks().forEach((track) => track.stop());
+              mediaStream = null;
+              startCameraBtn.textContent = "Activate Camera";
+            }
+
+            // Track photo uploaded
+            if (currentUserData) {
+              const userDocRef = doc(
+                db,
+                `artifacts/${appId}/users/${userId}/profile`,
+                "data"
+              );
+              updateDoc(userDocRef, {
+                photosTaken: arrayUnion(Date.now().toString()), // Add timestamp as unique identifier
+              });
+            }
+
+            showMessage("Photo uploaded!", "success");
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Function to reset camera and photo preview state
+      function resetCameraAndPhotoPreview() {
+        if (mediaStream) {
+          mediaStream.getTracks().forEach((track) => track.stop());
+          mediaStream = null;
+        }
+        // Hide the camera preview container
+        document
+          .getElementById("camera-preview-container")
+          .classList.add("hidden");
+        cameraFeed.classList.add("hidden");
+        photoCanvas.classList.add("hidden");
+        photoPreview.classList.add("hidden");
+        cameraPlaceholderText.classList.remove("hidden");
+        startCameraBtn.textContent = "Activate Camera";
+        takePhotoBtn.classList.add("hidden");
+        takePhotoBtn.disabled = true;
+        capturedPhotoBase64 = null;
+        uploadPhotoInput.value = ""; // Clear file input
+      }
+
+      // Tab switching logic
+      window.showTab = function (tabId) {
+        document.querySelectorAll(".tab-content").forEach((content) => {
+          content.classList.add("hidden");
+        });
+
+        const headerTrashIcon = document.getElementById("header-trash-icon");
+        // Remove all specific text color classes from the icon
+        headerTrashIcon.classList.remove(
+          "text-blue-700",
+          "text-red-600",
+          "text-green-600",
+          "text-amber-500"
+        );
+
+        document.querySelectorAll(".tab-button").forEach((button) => {
+          // Remove 'active' and all custom color classes
+          button.classList.remove("active", "blue", "red", "green", "yellow");
+        });
+
+        // Remove all specific color classes from ALL btn-primary elements
+        document.querySelectorAll(".btn-primary").forEach((btn) => {
+          btn.classList.remove("blue", "red", "green", "yellow");
+        });
+
+        const activeTabButton = document.getElementById(`tab-${tabId}`);
+        activeTabButton.classList.add("active"); // Add default active class
+
+        // Apply specific colors based on tabId
+        if (tabId === "map") {
+          activeTabButton.classList.add("blue"); // Add blue class to the tab button itself
+          headerTrashIcon.classList.add("text-blue-700");
+          // Apply blue to buttons within this tab
+          document
+            .querySelectorAll("#content-map .btn-primary")
+            .forEach((btn) => btn.classList.add("blue"));
+        } else if (tabId === "mark-can") {
+          activeTabButton.classList.add("red");
+          headerTrashIcon.classList.add("text-red-600");
+          // Apply red to buttons within this tab
+          document
+            .querySelectorAll("#content-mark-can .btn-primary")
+            .forEach((btn) => btn.classList.add("red"));
+        } else if (tabId === "chat") {
+          activeTabButton.classList.add("green");
+          headerTrashIcon.classList.add(
+            "text-green-600"
+          ); /* Use green-600 for consistency */
+          // Apply green to buttons within this tab
+          document
+            .querySelectorAll("#content-chat .btn-primary")
+            .forEach((btn) => btn.classList.add("green"));
+        } else if (tabId === "progress") {
+          activeTabButton.classList.add("yellow");
+          headerTrashIcon.classList.add(
+            "text-amber-500"
+          ); /* Use amber-500 for yellow */
+          // My Progress tab does not have dynamic buttons that need recoloring.
+        }
+
+        document.getElementById(`content-${tabId}`).classList.remove("hidden");
+
+        // Special handling for map and chat tabs to ensure correct rendering/sizing
+        if (tabId === "chat") {
+          if (
+            document
+              .getElementById("specific-chat-section")
+              .classList.contains("hidden")
+          ) {
+            document.getElementById("general-chat-messages").style.minHeight =
+              "300px";
+          }
+        } else if (tabId === "map") {
+          // Trigger map resize event to ensure it renders correctly after being hidden/shown
+          if (map) {
+            google.maps.event.trigger(map, "resize");
+            // Recenter map if there are trash cans, otherwise use default
+            if (trashCans.length > 0) {
+              const bounds = new google.maps.LatLngBounds();
+              trashCans.forEach((can) =>
+                bounds.extend({ lat: can.latitude, lng: can.longitude })
+              );
+              map.fitBounds(bounds);
+              map.setZoom(Math.min(map.getZoom(), 15)); // Adjust zoom level
+            } else {
+              map.setCenter({ lat: 34.0522, lng: -118.2437 }); // Default center (e.g., LA)
+              map.setZoom(12);
+            }
+          }
+        }
+        // Re-render Lucide icons for the newly active tab
+        lucide.createIcons();
+      };
+
+      // Initialize the app on window load (Firebase will initialize before map callback if defer)
+      window.onload = initializeFirebaseApp;
+    </script>
+  </body>
+</html>
