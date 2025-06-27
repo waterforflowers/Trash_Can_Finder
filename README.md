@@ -1,15 +1,15 @@
-# TrashCanFinder - SPOTLESS (working title)
+# 🗑️ TrashCanFinder - SPOTLESS (working title) 🗑️
 
 A web application for discovering, marking, and discussing trash can locations in your community.
 
-## Features
+## 🪛 Features 🪛
 
 - **Map & Routes**: Discover trash cans on Google Maps and plan walking routes
 - **Mark Trash Can**: Add new trash can locations with photos
 - **Community Chat**: Real-time chat for general discussions and trash can-specific conversations
 - **Progress Tracking**: Track your walking distance, visited cans, and earn badges
 
-## Setup Instructions
+## ⚙️ Setup Instructions ⚙️
 
 ### 1. Firebase Setup
 
@@ -59,7 +59,7 @@ firebase deploy --only firestore:rules
    http://localhost:8000/TrashCanFinder.html
    ```
 
-## Usage
+## 🚀 Usage 🚀
 
 1. **Sign In**: Use the "Sign In" button to create an account or sign in anonymously
 2. **Explore**: Use the Map & Routes tab to see existing trash cans
@@ -67,14 +67,14 @@ firebase deploy --only firestore:rules
 4. **Chat**: Join community discussions in the Community Chat tab
 5. **Track Progress**: Monitor your activity and badges in the My Progress tab
 
-## File Structure
+## 📁 File Structure 📁 
 
 - `TrashCanFinder.html` - Main application file
 - `firebase-config.js` - Firebase configuration
 - `firestore.rules` - Firestore security rules
 - `README.md` - This setup guide
 
-## Technologies Used
+## 📟 Technologies Used 📟
 
 - HTML5, CSS3, JavaScript (ES6+)
 - Firebase Authentication & Firestore
