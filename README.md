@@ -73,6 +73,7 @@ firebase deploy --only firestore:rules
 - `firebase-config.js` - Firebase configuration
 - `firestore.rules` - Firestore security rules
 - `README.md` - This setup guide
+- `list & dictonaries` - Data management system
 
 ## 📟 Technologies Used 📟
 
