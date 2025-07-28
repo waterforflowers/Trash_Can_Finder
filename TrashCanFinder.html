@@ -8,7 +8,7 @@
     />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-app-status-bar-style" content="default" />
     <meta name="theme-color" content="#1d4ed8" id="theme-color-meta" />
     <title>SPOTLESS</title>
     <!-- Tailwind CSS CDN -->
@@ -356,32 +356,7 @@
       }
 
       /* Camera/Photo Upload Styles */
-      .camera-preview-container {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 4/3; /* Standard camera aspect ratio */
-        background-color: #e2e8f0;
-        border-radius: 0.5rem;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 1rem;
-        border: 1px solid #cbd5e1;
-      }
-      .camera-preview-container video,
-      .camera-preview-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-      .camera-preview-container canvas {
-        display: none; /* Hidden, used for capturing frames */
-      }
-      .camera-placeholder-text {
-        color: #94a3b8;
-        font-style: italic;
-      }
+      /* Removed .camera-preview-container styling as the div is removed */
 
       /* Modal Styles */
       .modal {
@@ -496,7 +471,6 @@
             <i data-lucide="map-pin" class="w-5 h-5"></i>
             Discover Trash Cans
           </h2>
-
           <!-- Search and Filter Section -->
           <div class="bg-blue-50 p-4 rounded-xl mb-4 border border-blue-200">
             <h3
@@ -513,10 +487,7 @@
                 class="input-field w-full"
               />
               <div class="flex gap-2">
-                <button
-                  id="filter-dropdown-btn"
-                  class="btn-primary blue flex-1"
-                >
+                <button id="filter-dropdown-btn" class="btn-primary blue flex-1">
                   <i data-lucide="filter" class="w-4 h-4"></i>
                   Filters
                   <span
@@ -531,7 +502,6 @@
                 </button>
               </div>
             </div>
-
             <!-- Filter Dropdown Menu -->
             <div
               id="filter-dropdown"
@@ -571,33 +541,28 @@
                 <label class="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
-                    id="filter-recent"
+                    id="filter-marked-by-me"
                     class="filter-checkbox"
-                    data-filter="recent"
+                    data-filter="markedByMe"
                   />
-                  <span>🕒 Recently Added (Last 7 days)</span>
+                  <span>📍 Marked by Me</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    id="filter-has-chat"
+                    class="filter-checkbox"
+                    data-filter="hasChat"
+                  />
+                  <span>💬 Has Chat</span>
                 </label>
               </div>
-              <div class="flex gap-2 mt-3 pt-2 border-t border-gray-200">
-                <button
-                  id="apply-filters-btn"
-                  class="btn-primary blue text-sm px-3 py-1 flex-1"
-                >
-                  Apply Filters
-                </button>
-                <button
-                  id="clear-filters-btn"
-                  class="bg-gray-500 hover:bg-gray-600 text-white text-sm px-3 py-1 rounded flex-1"
-                >
-                  Clear All
-                </button>
-              </div>
-            </div>
-
-            <!-- Active Filters Display -->
-            <div id="active-filters-display" class="hidden mt-2">
-              <div class="text-xs text-gray-600 mb-1">Active Filters:</div>
-              <div id="active-filters-tags" class="flex flex-wrap gap-1"></div>
+              <button
+                id="apply-filters-btn"
+                class="btn-primary blue w-full mt-3"
+              >
+                Apply Filters
+              </button>
             </div>
           </div>
 
@@ -640,7 +605,7 @@
                   required
                 />
               </div>
-              <button type="submit" class="btn-primary">
+              <button type="submit" class="btn-primary blue">
                 <i data-lucide="map" class="w-5 h-5"></i>
                 Show Route
               </button>
@@ -657,7 +622,7 @@
 
         <div id="content-mark-can" class="tab-content hidden">
           <h2
-            class="text-xl font-semibold text-gray-800 mb-1 flex items-center gap-2"
+            class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2"
           >
             <i data-lucide="plus-circle" class="w-5 h-5"></i>
             Mark a New Trash Can
@@ -700,37 +665,19 @@
                   <i data-lucide="camera" class="w-4 h-4"></i> Add a Photo
                   (Optional)
                 </h4>
-                <div
-                  class="camera-preview-container hidden"
-                  id="camera-preview-container"
-                >
-                  <video
-                    id="camera-feed"
-                    class="hidden"
-                    autoplay
-                    playsinline
-                  ></video>
-                  <canvas id="photo-canvas" class="hidden"></canvas>
-                  <img id="photo-preview" class="hidden" alt="Photo preview" />
-                  <p
-                    id="camera-placeholder-text"
-                    class="camera-placeholder-text"
-                  >
-                    No camera active / No photo taken
-                  </p>
-                </div>
+                <!-- Removed camera-preview-container as requested -->
                 <div class="flex gap-2 mt-3">
                   <button
                     type="button"
                     id="start-camera-btn"
-                    class="btn-primary flex-1"
+                    class="btn-primary red flex-1"
                   >
                     <i data-lucide="video" class="w-5 h-5"></i> Activate Camera
                   </button>
                   <button
                     type="button"
                     id="take-photo-btn"
-                    class="btn-primary flex-1 hidden"
+                    class="btn-primary red flex-1 hidden"
                     disabled
                   >
                     <i data-lucide="camera" class="w-5 h-5"></i> Take Photo
@@ -744,14 +691,21 @@
                   <button
                     type="button"
                     id="upload-photo-btn"
-                    class="btn-primary flex-1"
+                    class="btn-primary red flex-1"
                   >
                     <i data-lucide="upload" class="w-5 h-5"></i> Upload Photo
                   </button>
                 </div>
+                <!-- Hidden elements for camera/photo functionality -->
+                <video id="camera-feed" class="hidden" autoplay playsinline></video>
+                <canvas id="photo-canvas" class="hidden"></canvas>
+                <img id="photo-preview" class="hidden" alt="Photo preview" />
+                <p id="camera-placeholder-text" class="hidden">
+                  No camera active / No photo taken
+                </p>
               </div>
 
-              <button type="submit" class="btn-primary w-full mt-4">
+              <button type="submit" class="btn-primary red w-full mt-4">
                 <i data-lucide="check-circle" class="w-5 h-5"></i>
                 Mark Trash Can
               </button>
@@ -761,15 +715,11 @@
 
         <div id="content-chat" class="tab-content hidden h-full flex flex-col">
           <h2
-            class="text-xl font-semibold text-gray-800 mb-1 flex items-center gap-2"
+            class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2"
           >
             <i data-lucide="messages-square" class="w-5 h-5"></i>
-            Community Chat
+            Community Chat Board
           </h2>
-          <p class="text-gray-600 mb-4 text-sm">
-            Join the global community discussion below, or click on any trash
-            can on the map and select "View Chat" to discuss specific locations.
-          </p>
           <div
             id="general-chat-messages"
             class="flex-grow bg-gray-50 p-4 rounded-xl overflow-y-auto mb-4 border border-gray-200 flex flex-col items-start"
@@ -786,10 +736,7 @@
               placeholder="Type your message here..."
               class="input-field flex-grow"
             />
-            <button
-              id="send-general-message-btn"
-              class="btn-primary flex-shrink-0"
-            >
+            <button id="send-general-message-btn" class="btn-primary green flex-shrink-0">
               <i data-lucide="send" class="w-5 h-5"></i>
               Send
             </button>
@@ -821,7 +768,7 @@
               />
               <button
                 id="send-specific-message-btn"
-                class="btn-primary flex-shrink-0"
+                class="btn-primary green flex-shrink-0"
               >
                 <i data-lucide="send" class="w-5 h-5"></i>
                 Send
@@ -832,7 +779,7 @@
 
         <div id="content-progress" class="tab-content hidden">
           <h2
-            class="text-xl font-semibold text-gray-800 mb-1 flex items-center gap-2"
+            class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2"
           >
             <i data-lucide="activity" class="w-5 h-5"></i>
             Your Activity & Achievements
@@ -863,18 +810,6 @@
                   >0</span
                 >
               </p>
-              <p class="text-gray-600">
-                Photos Uploaded:
-                <span id="photos-taken-count" class="font-bold text-blue-700"
-                  >0</span
-                >
-              </p>
-              <p class="text-gray-600">
-                Community Comments:
-                <span id="comments-count" class="font-bold text-blue-700"
-                  >0</span
-                >
-              </p>
             </div>
             <div>
               <h3
@@ -900,68 +835,55 @@
                 <li>"New Trash Cans Visited" (3 unique cans)</li>
                 <li>"Trash Can Most Frequented" (Visit any can 5 times)</li>
                 <li>"New Trash Cans Marked" (Mark 1 new can)</li>
-                <li>"Photo Enthusiast" (Upload 5 photos)</li>
-                <li>"Community Contributor" (Make 10 comments)</li>
               </ul>
             </div>
-          </div>
 
-          <!-- Enhanced Data Display Section -->
-          <div class="mt-6 bg-gray-50 p-5 rounded-xl shadow-sm space-y-4">
-            <h3
-              class="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2"
-            >
-              <i data-lucide="database" class="w-5 h-5"></i>
-              Your Data & Preferences
-            </h3>
-
-            <!-- Search History -->
-            <div class="mb-4">
-              <h4 class="text-md font-medium text-gray-600 mb-2">
-                Recent Searches
-              </h4>
-              <div id="search-history-display" class="text-sm text-gray-500">
-                <p class="italic">No recent searches</p>
-              </div>
-            </div>
-
-            <!-- Favorite Locations -->
-            <div class="mb-4">
-              <h4 class="text-md font-medium text-gray-600 mb-2">
-                Favorite Locations
-              </h4>
-              <div id="favorites-display" class="text-sm text-gray-500">
-                <p class="italic">No favorite locations</p>
-              </div>
-            </div>
-
-            <!-- Recent Routes -->
-            <div class="mb-4">
-              <h4 class="text-md font-medium text-gray-600 mb-2">
-                Recent Routes
-              </h4>
-              <div id="recent-routes-display" class="text-sm text-gray-500">
-                <p class="italic">No recent routes</p>
-              </div>
-            </div>
-
-            <!-- User Settings -->
-            <div class="mb-4">
-              <h4 class="text-md font-medium text-gray-600 mb-2">Settings</h4>
-              <div class="space-y-2 text-sm">
-                <div class="flex justify-between">
-                  <span>Preferred Units:</span>
-                  <span id="units-display" class="font-medium">km</span>
+            <!-- New: Your Data & Preferences Section -->
+            <div class="border-t border-gray-200 pt-4 mt-4">
+              <h3
+                class="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2"
+              >
+                <i data-lucide="settings" class="w-5 h-5"></i>
+                Your Data & Preferences
+              </h3>
+              <div class="space-y-3">
+                <div>
+                  <h4 class="font-medium text-gray-700 mb-1">Recent Searches:</h4>
+                  <ul id="recent-searches-list" class="list-disc list-inside text-gray-600 ml-4">
+                    <p class="text-gray-500 italic text-sm">No recent searches.</p>
+                  </ul>
                 </div>
-                <div class="flex justify-between">
-                  <span>Default Map Zoom:</span>
-                  <span id="zoom-display" class="font-medium">12</span>
+                <div>
+                  <h4 class="font-medium text-gray-700 mb-1">Favorite Locations:</h4>
+                  <ul id="favorite-locations-list" class="list-disc list-inside text-gray-600 ml-4">
+                    <p class="text-gray-500 italic text-sm">No favorite locations.</p>
+                  </ul>
                 </div>
-                <div class="flex justify-between">
-                  <span>Notifications:</span>
-                  <span id="notifications-display" class="font-medium"
-                    >Enabled</span
-                  >
+                <div>
+                  <h4 class="font-medium text-gray-700 mb-1">Recent Routes:</h4>
+                  <ul id="recent-routes-list" class="list-disc list-inside text-gray-600 ml-4">
+                    <p class="text-gray-500 italic text-sm">No recent routes.</p>
+                  </ul>
+                </div>
+                <div class="border-t border-gray-100 pt-3">
+                  <h4 class="font-medium text-gray-700 mb-2">Settings:</h4>
+                  <div class="space-y-2">
+                    <div>
+                      <label for="preferred-units" class="block text-sm font-medium text-gray-700 mb-1">Preferred Units:</label>
+                      <select id="preferred-units" class="input-field w-auto">
+                        <option value="km">Kilometers (km)</option>
+                        <option value="mi">Miles (mi)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label for="default-map-zoom" class="block text-sm font-medium text-gray-700 mb-1">Default Map Zoom:</label>
+                      <input type="number" id="default-map-zoom" min="1" max="20" class="input-field w-auto" value="12">
+                    </div>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" id="notifications-enabled" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                      <span class="text-sm font-medium text-gray-700">Enable Notifications</span>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -973,73 +895,48 @@
     <!-- Authentication Modal -->
     <div id="auth-modal" class="modal">
       <div class="modal-content">
-        <button class="modal-close-button" id="close-auth-modal">
-          &times;
-        </button>
-        <div class="space-y-4">
-          <div>
-            <label
-              for="auth-email"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >Email</label
-            >
-            <input
-              type="email"
-              id="auth-email"
-              placeholder="Enter your email"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label
-              for="auth-password"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >Password</label
-            >
-            <input
-              type="password"
-              id="auth-password"
-              placeholder="Enter your password"
-              class="input-field"
-            />
-          </div>
-          <div class="flex gap-4 mt-6">
-            <button id="auth-signin-btn" class="btn-primary flex-1 purple">
-              Sign In
-            </button>
-            <button id="auth-signup-btn" class="btn-primary flex-1 purple">
-              Sign Up
-            </button>
-          </div>
+        <button class="modal-close-button" id="close-auth-modal">&times;</button>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">
+          Sign In or Sign Up
+        </h3>
+        <div class="space-y-4"> <!-- Added a div for spacing -->
+            <div>
+                <label for="auth-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input
+                    type="email"
+                    id="auth-email"
+                    placeholder="Enter your email"
+                    class="input-field"
+                />
+            </div>
+            <div>
+                <label for="auth-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input
+                    type="password"
+                    id="auth-password"
+                    placeholder="Enter your password"
+                    class="input-field"
+                />
+            </div>
         </div>
-        <div
-          id="auth-message"
-          class="text-sm text-center text-red-500 hidden mt-4"
-        ></div>
+        <div class="flex gap-4 mt-2">
+          <button id="auth-signin-btn" class="btn-primary flex-1 purple">
+            Sign In
+          </button>
+          <button id="auth-signup-btn" class="btn-primary flex-1 purple">
+            Sign Up
+          </button>
+        </div>
+        <div id="auth-message" class="text-sm text-center text-red-500 hidden"></div>
       </div>
     </div>
 
     <!-- Google Maps API Script -->
-    <script>
-      // Load Google Maps API with the key from config
-      function loadGoogleMapsAPI() {
-        const script = document.createElement("script");
-        const apiKey = window.GOOGLE_MAPS_API_KEY || "YOUR_API_KEY";
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-      }
-      // Load the API after Firebase config is loaded
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", loadGoogleMapsAPI);
-      } else {
-        loadGoogleMapsAPI();
-      }
-    </script>
-
-    <!-- Firebase Configuration -->
-    <script src="firebase-config.js"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+      async
+      defer
+    ></script>
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -1069,8 +966,7 @@
       } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
       // Initialize Firebase variables (provided by Canvas environment)
-      const appId =
-        typeof __app_id !== "undefined" ? __app_id : "default-app-id";
+      const appId = typeof __app_id !== "undefined" ? __app_id : "default-app-id";
       const firebaseConfig =
         typeof __firebase_config !== "undefined"
           ? JSON.parse(__firebase_config)
@@ -1083,8 +979,9 @@
       let userDisplayName = "Guest User";
       let currentUserData = null;
 
-      // Google Map variables
+      // Global map variables
       let map;
+      let mapInitialized = false; // Flag to track map initialization
       let mapMarkers = {}; // Store Google Maps Marker objects by trash can ID
       let mapPolylines = []; // Store Google Maps Polyline objects for routes
       let infoWindow; // Global info window for markers
@@ -1099,75 +996,7 @@
       let generalChatMessages = [];
       let specificChatMessages = [];
       let currentSelectedCanId = null;
-
-      // Enhanced data structures for better functionality
-      let userSettings = {
-        defaultMapZoom: 12,
-        preferredUnits: "km", // 'km' or 'miles'
-        notificationsEnabled: true,
-        autoTrackLocation: false,
-        theme: "light", // 'light' or 'dark'
-      };
-
-      let searchHistory = [];
-      let favoriteLocations = [];
-      let recentRoutes = [];
-      let trashCanCategories = {
-        park: { icon: "🌳", color: "#10b981" },
-        street: { icon: "🚶", color: "#3b82f6" },
-        beach: { icon: "🏖️", color: "#f59e0b" },
-        shopping: { icon: "🛍️", color: "#8b5cf6" },
-        transport: { icon: "🚌", color: "#ef4444" },
-        other: { icon: "🗑️", color: "#6b7280" },
-      };
-
-      let achievementSystem = {
-        badges: {
-          first_visit: {
-            name: "First Steps",
-            description: "Visit your first trash can",
-            icon: "👣",
-            requirement: 1,
-          },
-          explorer: {
-            name: "Explorer",
-            description: "Visit 5 different trash cans",
-            icon: "🗺️",
-            requirement: 5,
-          },
-          photographer: {
-            name: "Photographer",
-            description: "Upload 3 photos",
-            icon: "📸",
-            requirement: 3,
-          },
-          community: {
-            name: "Community Helper",
-            description: "Make 5 comments",
-            icon: "💬",
-            requirement: 5,
-          },
-          mapper: {
-            name: "Mapper",
-            description: "Mark 2 new trash cans",
-            icon: "📍",
-            requirement: 2,
-          },
-          walker: {
-            name: "Walker",
-            description: "Walk 10km total",
-            icon: "🚶‍♂️",
-            requirement: 10,
-          },
-        },
-        milestones: {
-          distance: [1, 5, 10, 25, 50, 100], // km
-          visits: [1, 5, 10, 25, 50, 100],
-          photos: [1, 3, 5, 10, 25, 50],
-          comments: [1, 5, 10, 25, 50, 100],
-          marked: [1, 2, 5, 10, 25, 50],
-        },
-      };
+      let currentFilters = {}; // Store active filters
 
       // Get Auth Modal Elements
       const authModal = document.getElementById("auth-modal");
@@ -1178,6 +1007,26 @@
       const authSignUpBtn = document.getElementById("auth-signup-btn");
       const authMessageDiv = document.getElementById("auth-message");
       const authToggleButton = document.getElementById("auth-toggle-button"); // Renamed from signin-button
+
+      // Get Filter Elements
+      const filterDropdownBtn = document.getElementById("filter-dropdown-btn");
+      const filterDropdown = document.getElementById("filter-dropdown");
+      const filterCheckboxes = document.querySelectorAll(".filter-checkbox");
+      const applyFiltersBtn = document.getElementById("apply-filters-btn");
+      const activeFiltersCountSpan = document.getElementById(
+        "active-filters-count"
+      );
+      const trashCanSearchInput = document.getElementById("trash-can-search");
+      const searchBtn = document.getElementById("search-btn");
+
+      // Get Progress Page Settings Elements
+      const preferredUnitsSelect = document.getElementById('preferred-units');
+      const defaultMapZoomInput = document.getElementById('default-map-zoom');
+      const notificationsEnabledCheckbox = document.getElementById('notifications-enabled');
+      const recentSearchesList = document.getElementById('recent-searches-list');
+      const favoriteLocationsList = document.getElementById('favorite-locations-list');
+      const recentRoutesList = document.getElementById('recent-routes-list');
+
 
       // Helper function to show messages in the main app message box
       function showMessage(message, type = "info") {
@@ -1212,11 +1061,7 @@
       // Helper function to show messages specifically within the auth modal
       function showAuthMessage(message, type = "error") {
         authMessageDiv.textContent = message;
-        authMessageDiv.classList.remove(
-          "hidden",
-          "text-red-500",
-          "text-green-500"
-        );
+        authMessageDiv.classList.remove("hidden", "text-red-500", "text-green-500");
         if (type === "error") {
           authMessageDiv.classList.add("text-red-500");
         } else {
@@ -1230,29 +1075,11 @@
         authMessageDiv.classList.add("hidden"); // Clear previous messages
         authEmailInput.value = "";
         authPasswordInput.value = "";
-
-        // Change theme color to purple for sign in modal
-        const themeColorMeta = document.getElementById("theme-color-meta");
-        themeColorMeta.setAttribute("content", "#8b5cf6"); // violet-500 (purple)
       }
 
       // Function to close the auth modal
       function closeAuthModal() {
         authModal.classList.remove("show");
-
-        // Restore theme color to current tab's color
-        const activeTab = document.querySelector(".tab-button.active");
-        if (activeTab) {
-          let tabId = "";
-          if (activeTab.id === "tab-map") tabId = "map";
-          else if (activeTab.id === "tab-mark-can") tabId = "mark-can";
-          else if (activeTab.id === "tab-chat") tabId = "chat";
-          else if (activeTab.id === "tab-progress") tabId = "progress";
-
-          if (tabId) {
-            updateThemeColor(tabId);
-          }
-        }
       }
 
       // Function to sign out the user
@@ -1270,18 +1097,28 @@
       // Initialize Firebase and Authentication
       async function initializeFirebaseApp() {
         try {
+          // Check if projectId is provided in firebaseConfig
+          if (!firebaseConfig.projectId || firebaseConfig.projectId === "your-project-id") {
+              showMessage(
+                  "Firebase projectId is not configured. Please open 'firebase-config.js' and replace 'your-project-id' with your actual Firebase project ID to enable full app functionality.",
+                  "error"
+              );
+              // Set the auth toggle button to open the modal directly if config is missing
+              authToggleButton.textContent = "Sign In";
+              authToggleButton.onclick = openAuthModal;
+              return; // Stop further Firebase initialization
+          }
+
           app = initializeApp(firebaseConfig);
           db = getFirestore(app);
           auth = getAuth(app);
 
-          // --- Firebase Authentication Handling ---
           // This listener runs whenever the user's sign-in state changes.
           onAuthStateChanged(auth, async (user) => {
             if (user) {
               userId = user.uid;
               // Determine user display name
-              userDisplayName =
-                user.email || `User: ${userId.substring(0, 8)}... (Guest)`;
+              userDisplayName = user.email || `User: ${userId.substring(0, 8)}... (Guest)`;
 
               const userDocRef = doc(
                 db,
@@ -1296,60 +1133,44 @@
                   visitedTrashCans: [],
                   markedTrashCans: [],
                   frequentedTrashCans: {},
-                  photosTaken: [],
-                  comments: [],
                   badges: [],
-                  createdAt: serverTimestamp(),
+                  recentSearches: [], // New field
+                  favoriteLocations: [], // New field
+                  recentRoutes: [], // New field
+                  preferredUnits: 'km', // New field
+                  defaultMapZoom: 12, // New field
+                  notificationsEnabled: true, // New field
+                  createdAt: serverTimestamp()
                 });
                 showMessage("New user profile created!", "success");
               } else {
                 const userData = userDocSnap.data();
-                if (
-                  userData.displayName &&
-                  userData.displayName !== "Guest User"
-                ) {
+                if (userData.displayName && userData.displayName !== "Guest User") {
                   userDisplayName = userData.displayName;
                 }
               }
 
-              document.getElementById("user-id-display").textContent =
-                userDisplayName;
+              document.getElementById("user-id-display").textContent = userDisplayName;
               authToggleButton.textContent = "Sign Out";
               authToggleButton.onclick = signOutUser; // Change button to sign out
-              authToggleButton.classList.remove(
-                "bg-purple-500",
-                "hover:bg-purple-600"
-              );
-              authToggleButton.classList.add("bg-red-500", "hover:bg-red-600");
+              // Ensure it's purple for signed-in state
+              authToggleButton.classList.remove("bg-blue-500", "hover:bg-blue-600", "bg-red-500", "hover:bg-red-600");
+              authToggleButton.classList.add("bg-purple-500", "hover:bg-purple-600");
 
               setupFirestoreListeners();
-              showTab("map");
-              lucide.createIcons();
               closeAuthModal();
-
-              // Load user's local data structures
-              loadUserSettings();
-              loadSearchHistory();
-              loadFavorites();
-              loadRecentRoutes();
-
               showMessage(`Welcome, ${userDisplayName}!`, "success");
+
             } else {
               // No user signed in or signed out
               userId = "";
               userDisplayName = "Guest User";
-              document.getElementById("user-id-display").textContent =
-                userDisplayName;
+              document.getElementById("user-id-display").textContent = userDisplayName;
               authToggleButton.textContent = "Sign In";
               authToggleButton.onclick = openAuthModal; // Change button to sign in
-              authToggleButton.classList.remove(
-                "bg-red-500",
-                "hover:bg-red-600"
-              );
-              authToggleButton.classList.add(
-                "bg-purple-500",
-                "hover:bg-purple-600"
-              );
+              // Ensure it's purple for signed-out state
+              authToggleButton.classList.remove("bg-red-500", "hover:bg-red-600", "bg-blue-500", "hover:bg-blue-600");
+              authToggleButton.classList.add("bg-purple-500", "hover:bg-purple-600");
 
               console.log("No user signed in. Displaying 'Sign In' option.");
 
@@ -1359,19 +1180,12 @@
               const initialAuthAttemptedKey = "initialAuthAttempted_" + appId;
               if (!sessionStorage.getItem(initialAuthAttemptedKey)) {
                 try {
-                  if (
-                    typeof __initial_auth_token !== "undefined" &&
-                    __initial_auth_token
-                  ) {
-                    console.log(
-                      "Attempting secure sign-in with custom token..."
-                    );
+                  if (typeof __initial_auth_token !== "undefined" && __initial_auth_token) {
+                    console.log("Attempting secure sign-in with custom token...");
                     await signInWithCustomToken(auth, __initial_auth_token);
                     showMessage("Signed in securely!", "success");
                   } else {
-                    console.log(
-                      "No custom token provided. Attempting anonymous sign-in..."
-                    );
+                    console.log("No custom token provided. Attempting anonymous sign-in...");
                     await signInAnonymously(auth);
                     showMessage("Signed in anonymously!", "info");
                   }
@@ -1391,10 +1205,7 @@
                         "info"
                       );
                     } catch (anonError) {
-                      console.error(
-                        "Anonymous sign-in fallback failed:",
-                        anonError
-                      );
+                      console.error("Anonymous sign-in fallback failed:", anonError);
                       showMessage(
                         'Failed to sign in. Please check your network or use "Sign In" to register.',
                         "error"
@@ -1412,7 +1223,10 @@
                 }
               }
             }
+            // Ensure the map tab is shown and icons are created after auth state is resolved
+            showTab("map"); // Ensure initial tab is always set
           });
+
         } catch (initializationError) {
           console.error("Error initializing Firebase:", initializationError);
           showMessage(
@@ -1503,11 +1317,13 @@
 
       // Global function for Google Maps callback
       window.initMap = function () {
+        // Use defaultMapZoom from user data if available, otherwise 12
+        const initialZoom = currentUserData?.defaultMapZoom || 12;
         // Default center: Los Angeles (example)
         const defaultCenter = { lat: 34.0522, lng: -118.2437 };
         map = new google.maps.Map(document.getElementById("map"), {
           center: defaultCenter,
-          zoom: 12,
+          zoom: initialZoom,
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: false,
@@ -1527,7 +1343,12 @@
             "info"
           );
         });
+        mapInitialized = true; // Set flag to true once map is ready
         console.log("Google Map initialized.");
+        // After map is initialized, if the map tab is active, display trash cans
+        if (document.getElementById('content-map').classList.contains('hidden') === false) {
+            applyAndDisplayFilters(); // Re-apply filters to ensure markers are drawn on the now-ready map
+        }
       };
 
       // Set up real-time Firestore listeners
@@ -1544,7 +1365,7 @@
               id: doc.id,
               ...doc.data(),
             }));
-            displayTrashCansOnMap(); // Re-render map markers
+            applyAndDisplayFilters(); // Apply filters after data fetch
             console.log("Trash cans updated:", trashCans);
           },
           (error) => {
@@ -1556,10 +1377,7 @@
                 "error"
               );
             } else {
-              showMessage(
-                `Error loading trash cans: ${error.message}`,
-                "error"
-              );
+              showMessage(`Error loading trash cans: ${error.message}`, "error");
             }
           }
         );
@@ -1588,10 +1406,7 @@
                 "error"
               );
             } else {
-              showMessage(
-                `Error loading general chat: ${error.message}`,
-                "error"
-              );
+              showMessage(`Error loading general chat: ${error.message}`, "error");
             }
           }
         );
@@ -1609,7 +1424,10 @@
               currentUserData = docSnap.data();
               displayUserProgress();
               checkAndAwardBadges();
+              updateSettingsUI(); // Update UI with fetched settings
               console.log("User data updated:", currentUserData);
+              // Re-apply filters as user data (visited/marked) might have changed
+              applyAndDisplayFilters();
             } else {
               console.log("Current user document does not exist yet.");
             }
@@ -1634,8 +1452,7 @@
           type === "general"
             ? document.getElementById("general-chat-messages")
             : document.getElementById("specific-chat-messages");
-        const messages =
-          type === "general" ? generalChatMessages : specificChatMessages;
+        const messages = type === "general" ? generalChatMessages : specificChatMessages;
 
         chatMessagesContainer.innerHTML = ""; // Clear previous messages
 
@@ -1645,9 +1462,7 @@
         }
 
         // Sort messages by timestamp if available (ascending)
-        messages.sort(
-          (a, b) => (a.timestamp?.toDate() || 0) - (b.timestamp?.toDate() || 0)
-        );
+        messages.sort((a, b) => (a.timestamp?.toDate() || 0) - (b.timestamp?.toDate() || 0));
 
         messages.forEach((msg) => {
           const isSelf = msg.userId === userId;
@@ -1684,14 +1499,25 @@
       }
 
       // Function to display trash cans on the actual Google Map
-      function displayTrashCansOnMap() {
+      function displayTrashCansOnMap(filteredCans = trashCans) {
+        if (!mapInitialized || !map) { // Ensure map is initialized before proceeding
+            console.warn("Attempted to display trash cans before map was initialized.");
+            return;
+        }
         // Clear existing markers
         for (const canId in mapMarkers) {
           mapMarkers[canId].setMap(null); // Remove marker from map
         }
         mapMarkers = {}; // Reset markers object
 
-        trashCans.forEach((can) => {
+        if (filteredCans.length === 0) {
+          // If no trash cans after filtering, center on default location
+          map.setCenter({ lat: 34.0522, lng: -118.2437 }); // Default center (e.g., LA)
+          map.setZoom(currentUserData?.defaultMapZoom || 12); // Use user's default zoom
+          return;
+        }
+
+        filteredCans.forEach((can) => {
           const position = { lat: can.latitude, lng: can.longitude };
           const marker = new google.maps.Marker({
             position: position,
@@ -1703,130 +1529,199 @@
             title: can.description || "Trash Can",
           });
 
-          // Content for the InfoWindow
           let infoContent = `
-                    <div class="trash-can-marker-content">
-                        <strong>Trash Can ID:</strong> ${can.id.substring(
-                          0,
-                          8
-                        )}...<br>
-                        <strong>Description:</strong> ${
-                          can.description || "N/A"
-                        }<br>
-                        <strong>Marked by:</strong> ${
-                          can.markedByUserDisplayName || "Unknown"
-                        }<br>
-                `;
+            <div class="trash-can-marker-content">
+                <strong>Trash Can ID:</strong> ${can.id.substring(0, 8)}...<br>
+                <strong>Description:</strong> ${can.description || "N/A"}<br>
+                <strong>Marked by:</strong> ${
+                  can.markedByUserDisplayName || "Unknown"
+                }<br>
+          `;
           if (can.imageUrl) {
             infoContent += `<img src="${can.imageUrl}" alt="Trash Can Photo" class="info-window-image">`;
           }
-          infoContent += `<br><button onclick="window.selectTrashCanForChat('${can.id}')" class="btn-primary p-2 text-sm rounded-md mt-2">View Chat</button></div>`;
+          infoContent += `<br>
+            <div class="flex flex-col gap-2 mt-2">
+                <button onclick="window.selectTrashCanForChat('${can.id}')" class="btn-primary p-2 text-sm rounded-md blue">View Chat</button>
+                <button onclick="window.addFavoriteLocation('${can.id}', '${can.description || 'Trash Can'}')" class="btn-primary p-2 text-sm rounded-md yellow">Favorite</button>
+            </div>
+          </div>`;
 
           marker.addListener("click", () => {
             infoWindow.setContent(infoContent);
             infoWindow.open(map, marker);
-            // Simulate visiting a trash can when marker is clicked
             trackVisitedCan(can.id);
           });
 
-          mapMarkers[can.id] = marker; // Store marker reference
+          mapMarkers[can.id] = marker;
         });
+
+        // Fit map to filtered bounds
+        if (filteredCans.length > 0) {
+          const bounds = new google.maps.LatLngBounds();
+          filteredCans.forEach((can) =>
+            bounds.extend({ lat: can.latitude, lng: can.longitude })
+          );
+          map.fitBounds(bounds);
+          map.setZoom(Math.min(map.getZoom(), currentUserData?.defaultMapZoom || 15)); // Adjust zoom level, use user's default zoom
+        }
       }
 
+      // --- Filter and Search Logic ---
+      filterDropdownBtn.addEventListener("click", () => {
+        filterDropdown.classList.toggle("hidden");
+      });
+
+      applyFiltersBtn.addEventListener("click", () => {
+        applyAndDisplayFilters();
+        filterDropdown.classList.add("hidden"); // Hide dropdown after applying
+      });
+
+      searchBtn.addEventListener("click", applyAndDisplayFilters); // Trigger filter/search on search button click
+      trashCanSearchInput.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+          applyAndDisplayFilters();
+        }
+      });
+
+      function applyAndDisplayFilters() {
+        const searchTerm = trashCanSearchInput.value.toLowerCase().trim();
+        let activeFilterCount = 0;
+
+        // Update currentFilters based on checkbox states
+        filterCheckboxes.forEach((checkbox) => {
+          currentFilters[checkbox.dataset.filter] = checkbox.checked;
+          if (checkbox.checked) {
+            activeFilterCount++;
+          }
+        });
+
+        // Update filter count display
+        if (activeFilterCount > 0) {
+          activeFiltersCountSpan.textContent = activeFilterCount;
+          activeFiltersCountSpan.classList.remove("hidden");
+        } else {
+          activeFiltersCountSpan.classList.add("hidden");
+        }
+
+        const filteredCans = trashCans.filter((can) => {
+          const matchesSearch =
+            !searchTerm ||
+            can.id.toLowerCase().includes(searchTerm) ||
+            can.address.toLowerCase().includes(searchTerm) ||
+            can.description.toLowerCase().includes(searchTerm) ||
+            (can.markedByUserDisplayName && can.markedByUserDisplayName.toLowerCase().includes(searchTerm));
+
+          let matchesFilters = true;
+
+          if (currentFilters.hasPhoto && !can.imageUrl) {
+            matchesFilters = false;
+          }
+          // Check if currentUserData and visitedTrashCans exist before using .includes
+          if (currentFilters.visited && !(currentUserData?.visitedTrashCans || []).includes(can.id)) {
+            matchesFilters = false;
+          }
+          if (currentFilters.notVisited && (currentUserData?.visitedTrashCans || []).includes(can.id)) {
+            matchesFilters = false;
+          }
+          if (currentFilters.markedByMe && can.markedByUserId !== userId) {
+            matchesFilters = false;
+          }
+          // Placeholder for hasChat filter - requires backend support to be accurate
+          if (currentFilters.hasChat) {
+            // This filter is currently a placeholder and will always return true.
+            // A real implementation would require a field on the trash can document
+            // indicating if it has chat messages, or a server-side query.
+             matchesFilters = true;
+          }
+
+
+          return matchesSearch && matchesFilters;
+        });
+
+        if (mapInitialized && map) { // Only call displayTrashCansOnMap if map is ready
+            displayTrashCansOnMap(filteredCans);
+        } else {
+            console.warn("Map not yet initialized when applying filters. Markers will appear once map is ready.");
+        }
+
+        // Save recent search term to user data
+        if (searchTerm && userId) {
+            const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile`, 'data');
+            const updatedSearches = [searchTerm, ...(currentUserData?.recentSearches || [])].slice(0, 5); // Keep last 5
+            updateDoc(userDocRef, { recentSearches: updatedSearches }).catch(console.error);
+        }
+      }
+
+
       // Handle marking a new trash can
-      document
-        .getElementById("mark-can-form")
-        .addEventListener("submit", async (event) => {
+      document.getElementById("mark-can-form").addEventListener("submit", async (event) => {
           event.preventDefault();
           const address = document.getElementById("can-address").value.trim();
-          const desc = document.getElementById("can-desc").value.trim();
+          const desc = document.getElementById("can-desc").trim();
 
           if (!address) {
-            showMessage("Please enter an address.", "error");
-            return;
+              showMessage("Please enter an address.", "error");
+              return;
           }
           if (!desc) {
-            showMessage("Please enter a description.", "error");
-            return;
+              showMessage("Please enter a description.", "error");
+              return;
           }
 
           // Geocode the address to get latitude and longitude using Google Maps Geocoder
-          geocoder.geocode({ address: address }, async (results, status) => {
-            if (status === "OK" && results[0]) {
-              const lat = results[0].geometry.location.lat();
-              const lon = results[0].geometry.location.lng();
+          geocoder.geocode({ 'address': address }, async (results, status) => {
+              if (status === 'OK' && results[0]) {
+                  const lat = results[0].geometry.location.lat();
+                  const lon = results[0].geometry.location.lng();
 
-              if (!capturedPhotoBase64) {
-                showMessage(
-                  "No photo provided, marking trash can without an image.",
-                  "info"
-                );
-              }
-
-              try {
-                await addDoc(
-                  collection(db, `artifacts/${appId}/public/data/trash_cans`),
-                  {
-                    latitude: lat,
-                    longitude: lon,
-                    address: address, // Store the address too
-                    description: desc,
-                    markedByUserId: userId,
-                    markedByUserDisplayName: userDisplayName,
-                    imageUrl: capturedPhotoBase64 || null, // Store Base64 image
-                    createdAt: serverTimestamp(),
+                  if (!capturedPhotoBase64) {
+                      showMessage("No photo provided, marking trash can without an image.", "info");
                   }
-                );
 
-                // Update user's marked cans count
-                const userDocRef = doc(
-                  db,
-                  `artifacts/${appId}/users/${userId}/profile`,
-                  "data"
-                );
-                await updateDoc(userDocRef, {
-                  markedTrashCans: arrayUnion(userId + "_" + Date.now()), // Unique ID for each marked action
-                });
+                  try {
+                      await addDoc(collection(db, `artifacts/${appId}/public/data/trash_cans`), {
+                          latitude: lat,
+                          longitude: lon,
+                          address: address, // Store the address too
+                          description: desc,
+                          markedByUserId: userId,
+                          markedByUserDisplayName: userDisplayName,
+                          imageUrl: capturedPhotoBase64 || null, // Store Base64 image
+                          createdAt: serverTimestamp()
+                      });
 
-                showMessage("Trash can marked successfully!", "success");
-                document.getElementById("mark-can-form").reset();
-                // Reset camera/photo preview
-                resetCameraAndPhotoPreview();
-              } catch (error) {
-                console.error("Error marking trash can:", error);
-                if (error.code === "permission-denied") {
-                  showMessage(
-                    "Failed to mark trash can: Missing or insufficient Firestore permissions. Please check your Firebase Security Rules.",
-                    "error"
-                  );
-                } else {
-                  showMessage(
-                    `Failed to mark trash can: ${error.message}`,
-                    "error"
-                  );
-                }
+                      // Update user's marked cans count
+                      const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile`, 'data');
+                      await updateDoc(userDocRef, {
+                          markedTrashCans: arrayUnion(userId + '_' + Date.now()) // Unique ID for each marked action
+                      });
+
+                      showMessage("Trash can marked successfully!", "success");
+                      document.getElementById("mark-can-form").reset();
+                      // Reset camera/photo preview
+                      resetCameraAndPhotoPreview();
+                  } catch (error) {
+                      console.error("Error marking trash can:", error);
+                      if (error.code === 'permission-denied') {
+                           showMessage("Failed to mark trash can: Missing or insufficient Firestore permissions. Please check your Firebase Security Rules.", 'error');
+                      } else {
+                           showMessage(`Failed to mark trash can: ${error.message}`, 'error');
+                      }
+                  }
+              } else {
+                  showMessage('Geocoding failed: ' + status + '. Please check the address.', 'error');
               }
-            } else {
-              showMessage(
-                "Geocoding failed: " + status + ". Please check the address.",
-                "error"
-              );
-            }
           });
-        });
+      });
 
       // Handle route planning
-      document
-        .getElementById("plan-route-form")
-        .addEventListener("submit", async (event) => {
+      document.getElementById("plan-route-form").addEventListener("submit", async (event) => {
           event.preventDefault();
-          const startInput = document
-            .getElementById("route-start")
-            .value.trim();
+          const startInput = document.getElementById("route-start").value.trim();
           const endInput = document.getElementById("route-end").value.trim();
           const routeDisplay = document.getElementById("route-display");
-          const routeDetailsText =
-            document.getElementById("route-details-text");
+          const routeDetailsText = document.getElementById("route-details-text");
 
           // Clear previous polyline routes
           mapPolylines.forEach((polyline) => polyline.setMap(null));
@@ -1843,15 +1738,25 @@
             new Promise(async (resolve, reject) => {
               if (input.toLowerCase() === "my location") {
                 // Simulate current location as map center
-                resolve(map.getCenter());
+                // Attempt to get actual geolocation if available
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            resolve({ lat: position.coords.latitude, lng: position.coords.longitude });
+                        },
+                        (error) => {
+                            console.warn("Geolocation failed, using map center:", error);
+                            resolve(map.getCenter()); // Fallback to map center
+                        }
+                    );
+                } else {
+                    resolve(map.getCenter()); // Fallback if geolocation not supported
+                }
               } else if (input.toLowerCase().startsWith("trash can id:")) {
                 const canId = input.substring("trash can id:".length).trim();
                 const targetCan = trashCans.find((can) => can.id === canId);
                 if (targetCan) {
-                  resolve({
-                    lat: targetCan.latitude,
-                    lng: targetCan.longitude,
-                  });
+                  resolve({ lat: targetCan.latitude, lng: targetCan.longitude });
                   if (!isStart) trackVisitedCan(canId); // Track if it's the end point
                 } else {
                   reject("Trash Can ID not found.");
@@ -1859,11 +1764,7 @@
               } else {
                 // Assume it's lat,lon directly
                 const parts = input.split(",").map((p) => parseFloat(p.trim()));
-                if (
-                  parts.length === 2 &&
-                  !isNaN(parts[0]) &&
-                  !isNaN(parts[1])
-                ) {
+                if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
                   resolve({ lat: parts[0], lng: parts[1] });
                 } else {
                   // Attempt geocoding if not direct coordinates
@@ -1886,36 +1787,45 @@
             return;
           }
 
-          // Simulate route calculation and display on Google Map
-          const distance = calculateDistance(
+          const preferredUnits = currentUserData?.preferredUnits || 'km';
+          let distance = calculateDistance(
             startCoords.lat(),
             startCoords.lng(),
             endCoords.lat(),
-            endCoords.lng()
+            endCoords.lng(),
+            preferredUnits
           );
+
           const routeInstructions = `Walk ${distance.toFixed(
             2
-          )} km. Start at Lat: ${startCoords
-            .lat()
-            .toFixed(4)}, Lon: ${startCoords
-            .lng()
-            .toFixed(4)}. End at Lat: ${endCoords
+          )} ${preferredUnits}. Start at Lat: ${startCoords.lat().toFixed(
+            4
+          )}, Lon: ${startCoords.lng().toFixed(4)}. End at Lat: ${endCoords
             .lat()
             .toFixed(4)}, Lon: ${endCoords.lng().toFixed(4)}.`;
 
           routeDetailsText.textContent = routeInstructions;
           routeDisplay.classList.remove("hidden");
 
-          // Update user's total distance walked
+          // Update user's total distance walked and recent routes
           if (currentUserData) {
             const userDocRef = doc(
               db,
               `artifacts/${appId}/users/${userId}/profile`,
               "data"
             );
+            const updatedTotalDistance = (currentUserData.totalDistanceWalked || 0) + distance;
+            const updatedRecentRoutes = [{
+                start: startInput,
+                end: endInput,
+                distance: parseFloat(distance.toFixed(2)),
+                units: preferredUnits,
+                timestamp: serverTimestamp()
+            }, ...(currentUserData?.recentRoutes || [])].slice(0, 3); // Keep last 3 routes
+
             await updateDoc(userDocRef, {
-              totalDistanceWalked:
-                (currentUserData.totalDistanceWalked || 0) + distance,
+              totalDistanceWalked: updatedTotalDistance,
+              recentRoutes: updatedRecentRoutes
             });
           }
 
@@ -1935,32 +1845,26 @@
           bounds.extend(startCoords);
           bounds.extend(endCoords);
           map.fitBounds(bounds);
-          map.setZoom(Math.min(map.getZoom(), 15)); // Don't zoom too close if points are far
+          map.setZoom(Math.min(map.getZoom(), currentUserData?.defaultMapZoom || 15)); // Don't zoom too close if points are far
 
           showMessage("Route planned!", "success");
-
-          // Save to recent routes
-          addToRecentRoutes({
-            start: startInput,
-            end: endInput,
-            distance: distance,
-            instructions: routeInstructions,
-          });
-        });
+        }
+      );
 
       // Simple Haversine distance calculation (approximation)
-      function calculateDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371; // Radius of Earth in kilometers
-        const dLat = ((lat2 - lat1) * Math.PI) / 180;
-        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+      function calculateDistance(lat1, lon1, lat2, lon2, units = 'km') {
+        const R_km = 6371; // Radius of Earth in kilometers
+        const R_mi = 3958.8; // Radius of Earth in miles
+        const R = units === 'mi' ? R_mi : R_km;
+
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
         const a =
           Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-          Math.cos((lat1 * Math.PI) / 180) *
-            Math.cos((lat2 * Math.PI) / 180) *
-            Math.sin(dLon / 2) *
-            Math.sin(dLon / 2);
+          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c; // Distance in km
+        return R * c; // Distance in km or miles
       }
 
       // Track a visited trash can
@@ -1991,41 +1895,56 @@
         });
 
         checkAndAwardBadges(); // Re-check badges after update
-        checkAchievements(); // Check for new achievements using the enhanced system
+      }
+
+      // Add trash can to favorite locations
+      window.addFavoriteLocation = async function(canId, canDescription) {
+          if (!currentUserData || !userId) {
+              showMessage("Please sign in to favorite locations.", "error");
+              return;
+          }
+          const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile`, 'data');
+          const currentFavorites = currentUserData.favoriteLocations || [];
+
+          // Check if already favorited
+          if (currentFavorites.some(fav => fav.id === canId)) {
+              showMessage("This trash can is already in your favorites!", "info");
+              return;
+          }
+
+          const newFavorite = { id: canId, description: canDescription, timestamp: serverTimestamp() };
+          await updateDoc(userDocRef, {
+              favoriteLocations: arrayUnion(newFavorite)
+          });
+          showMessage(`"${canDescription}" added to favorites!`, "success");
       }
 
       // Display user progress (distance, visited cans, marked cans, badges)
       function displayUserProgress() {
         if (!currentUserData) {
           document.getElementById("total-distance").textContent = "Loading...";
-          document.getElementById("visited-cans-count").textContent =
-            "Loading...";
-          document.getElementById("marked-cans-count").textContent =
-            "Loading...";
-          document.getElementById("photos-taken-count").textContent =
-            "Loading...";
-          document.getElementById("comments-count").textContent = "Loading...";
+          document.getElementById("visited-cans-count").textContent = "Loading...";
+          document.getElementById("marked-cans-count").textContent = "Loading...";
           document.getElementById("badges-display").innerHTML =
             '<p class="text-gray-500 italic">No badges earned yet. Keep exploring!</p>';
+          recentSearchesList.innerHTML = '<p class="text-gray-500 italic text-sm">No recent searches.</p>';
+          favoriteLocationsList.innerHTML = '<p class="text-gray-500 italic text-sm">No favorite locations.</p>';
+          recentRoutesList.innerHTML = '<p class="text-gray-500 italic text-sm">No recent routes.</p>';
           return;
         }
 
-        document.getElementById("total-distance").textContent = `${(
-          currentUserData.totalDistanceWalked || 0
-        ).toFixed(2)} km`;
+        // Update Walking Metrics
+        const totalDistance = currentUserData.totalDistanceWalked || 0;
+        const preferredUnits = currentUserData.preferredUnits || 'km';
+        document.getElementById("total-distance").textContent = `${totalDistance.toFixed(2)} ${preferredUnits}`;
         document.getElementById("visited-cans-count").textContent = (
           currentUserData.visitedTrashCans || []
         ).length;
         document.getElementById("marked-cans-count").textContent = (
           currentUserData.markedTrashCans || []
         ).length;
-        document.getElementById("photos-taken-count").textContent = (
-          currentUserData.photosTaken || []
-        ).length;
-        document.getElementById("comments-count").textContent = (
-          currentUserData.comments || []
-        ).length;
 
+        // Update Badges Display
         const badgesDisplay = document.getElementById("badges-display");
         badgesDisplay.innerHTML = ""; // Clear previous badges
 
@@ -2048,9 +1967,86 @@
           lucide.createIcons(); // Re-render Lucide icons
         }
 
-        // Display enhanced data structures
-        displayEnhancedData();
+        // Update Recent Searches
+        recentSearchesList.innerHTML = '';
+        if ((currentUserData.recentSearches || []).length === 0) {
+            recentSearchesList.innerHTML = '<p class="text-gray-500 italic text-sm">No recent searches.</p>';
+        } else {
+            currentUserData.recentSearches.forEach(search => {
+                const li = document.createElement('li');
+                li.textContent = search;
+                recentSearchesList.appendChild(li);
+            });
+        }
+
+        // Update Favorite Locations
+        favoriteLocationsList.innerHTML = '';
+        if ((currentUserData.favoriteLocations || []).length === 0) {
+            favoriteLocationsList.innerHTML = '<p class="text-gray-500 italic text-sm">No favorite locations.</p>';
+        } else {
+            currentUserData.favoriteLocations.forEach(fav => {
+                const li = document.createElement('li');
+                li.textContent = `${fav.description} (ID: ${fav.id.substring(0,8)}...)`;
+                favoriteLocationsList.appendChild(li);
+            });
+        }
+
+        // Update Recent Routes
+        recentRoutesList.innerHTML = '';
+        if ((currentUserData.recentRoutes || []).length === 0) {
+            recentRoutesList.innerHTML = '<p class="text-gray-500 italic text-sm">No recent routes.</p>';
+        } else {
+            currentUserData.recentRoutes.forEach(route => {
+                const li = document.createElement('li');
+                const timestamp = route.timestamp ? new Date(route.timestamp.seconds * 1000).toLocaleDateString() : 'N/A';
+                li.textContent = `${route.start} to ${route.end} (${route.distance} ${route.units}) - ${timestamp}`;
+                recentRoutesList.appendChild(li);
+            });
+        }
       }
+
+      // Update settings UI elements based on currentUserData
+      function updateSettingsUI() {
+          if (currentUserData) {
+              preferredUnitsSelect.value = currentUserData.preferredUnits || 'km';
+              defaultMapZoomInput.value = currentUserData.defaultMapZoom || 12;
+              notificationsEnabledCheckbox.checked = currentUserData.notificationsEnabled !== undefined ? currentUserData.notificationsEnabled : true;
+          }
+      }
+
+      // Event listeners for settings changes
+      preferredUnitsSelect.addEventListener('change', async () => {
+          if (userId) {
+              const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile`, 'data');
+              await updateDoc(userDocRef, { preferredUnits: preferredUnitsSelect.value });
+              showMessage('Preferred units updated!', 'success');
+          }
+      });
+
+      defaultMapZoomInput.addEventListener('change', async () => {
+          if (userId) {
+              const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile`, 'data');
+              const newZoom = parseInt(defaultMapZoomInput.value);
+              if (!isNaN(newZoom) && newZoom >=1 && newZoom <= 20) {
+                  await updateDoc(userDocRef, { defaultMapZoom: newZoom });
+                  showMessage('Default map zoom updated!', 'success');
+                  if (map) { // Update map zoom immediately if map is initialized
+                      map.setZoom(newZoom);
+                  }
+              } else {
+                  showMessage('Invalid zoom level. Please enter a number between 1 and 20.', 'error');
+              }
+          }
+      });
+
+      notificationsEnabledCheckbox.addEventListener('change', async () => {
+          if (userId) {
+              const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile`, 'data');
+              await updateDoc(userDocRef, { notificationsEnabled: notificationsEnabledCheckbox.checked });
+              showMessage(`Notifications ${notificationsEnabledCheckbox.checked ? 'enabled' : 'disabled'}!`, 'success');
+          }
+      });
+
 
       // Logic for awarding badges
       async function checkAndAwardBadges() {
@@ -2082,10 +2078,7 @@
         const hasFrequentedBadge = Object.values(frequentedCans).some(
           (count) => count >= 5
         );
-        if (
-          hasFrequentedBadge &&
-          !updatedBadges.has("Trash Can Most Frequented")
-        ) {
+        if (hasFrequentedBadge && !updatedBadges.has("Trash Can Most Frequented")) {
           updatedBadges.add("Trash Can Most Frequented"); // Fixed typo in badge name
           showMessage(
             'Amazing! You earned "Trash Can Most Frequented" badge!',
@@ -2102,32 +2095,6 @@
           updatedBadges.add("New Trash Cans Marked");
           showMessage(
             'Great job! You earned "New Trash Cans Marked" badge!',
-            "success"
-          );
-          badgesAwarded = true;
-        }
-
-        // "Photo Enthusiast" (Upload 5 photos)
-        if (
-          (currentUserData.photosTaken || []).length >= 5 &&
-          !updatedBadges.has("Photo Enthusiast")
-        ) {
-          updatedBadges.add("Photo Enthusiast");
-          showMessage(
-            'Amazing! You earned "Photo Enthusiast" badge!',
-            "success"
-          );
-          badgesAwarded = true;
-        }
-
-        // "Community Contributor" (Make 10 comments)
-        if (
-          (currentUserData.comments || []).length >= 10 &&
-          !updatedBadges.has("Community Contributor")
-        ) {
-          updatedBadges.add("Community Contributor");
-          showMessage(
-            'Outstanding! You earned "Community Contributor" badge!',
             "success"
           );
           badgesAwarded = true;
@@ -2162,19 +2129,6 @@
                 timestamp: serverTimestamp(),
               }
             );
-
-            // Track comment made
-            if (currentUserData) {
-              const userDocRef = doc(
-                db,
-                `artifacts/${appId}/users/${userId}/profile`,
-                "data"
-              );
-              updateDoc(userDocRef, {
-                comments: arrayUnion(Date.now().toString()), // Add timestamp as unique identifier
-              });
-            }
-
             chatInput.value = ""; // Clear input
           } catch (error) {
             console.error("Error sending general message:", error);
@@ -2194,10 +2148,7 @@
         .getElementById("send-specific-message-btn")
         .addEventListener("click", async () => {
           if (!currentSelectedCanId) {
-            showMessage(
-              "Please select a trash can to chat about first.",
-              "error"
-            );
+            showMessage("Please select a trash can to chat about first.", "error");
             return;
           }
 
@@ -2223,25 +2174,9 @@
                 timestamp: serverTimestamp(),
               }
             );
-
-            // Track comment made
-            if (currentUserData) {
-              const userDocRef = doc(
-                db,
-                `artifacts/${appId}/users/${userId}/profile`,
-                "data"
-              );
-              updateDoc(userDocRef, {
-                comments: arrayUnion(Date.now().toString()), // Add timestamp as unique identifier
-              });
-            }
-
             chatInput.value = ""; // Clear input
           } catch (error) {
-            console.error(
-              `Error sending message for can ${currentSelectedCanId}:`,
-              error
-            );
+            console.error(`Error sending message for can ${currentSelectedCanId}:`, error);
             if (error.code === "permission-denied") {
               showMessage(
                 "Failed to send message for this can: Missing or insufficient Firestore permissions. Please check your Firebase Security Rules.",
@@ -2262,9 +2197,7 @@
         currentSelectedCanId = canId;
         document.getElementById("specific-chat-can-id").textContent =
           canId.substring(0, 8) + "...";
-        document
-          .getElementById("specific-chat-section")
-          .classList.remove("hidden");
+        document.getElementById("specific-chat-section").classList.remove("hidden");
 
         // Set up a listener for this specific trash can's chat
         const specificChatColRef = collection(
@@ -2286,10 +2219,7 @@
               ...doc.data(),
             }));
             displayChatMessages("specific");
-            console.log(
-              `Specific chat for ${canId} updated:`,
-              specificChatMessages
-            );
+            console.log(`Specific chat for ${canId} updated:`, specificChatMessages);
           },
           (error) => {
             console.error(`Error fetching specific chat for ${canId}:`, error);
@@ -2309,17 +2239,14 @@
 
         // Switch to chat tab if not already there
         showTab("chat");
-        document.getElementById("general-chat-messages").style.minHeight =
-          "150px"; // Adjust height for two chat sections
+        document.getElementById("general-chat-messages").style.minHeight = "150px"; // Adjust height for two chat sections
       };
 
       // --- Camera and Photo Functionality ---
       const cameraFeed = document.getElementById("camera-feed");
       const photoCanvas = document.getElementById("photo-canvas");
       const photoPreview = document.getElementById("photo-preview");
-      const cameraPlaceholderText = document.getElementById(
-        "camera-placeholder-text"
-      );
+      // const cameraPlaceholderText = document.getElementById("camera-placeholder-text"); // Removed from HTML
       const startCameraBtn = document.getElementById("start-camera-btn");
       const takePhotoBtn = document.getElementById("take-photo-btn");
       const uploadPhotoInput = document.getElementById("upload-photo-input");
@@ -2331,24 +2258,25 @@
           if (mediaStream) {
             // If camera is already active, stop it
             mediaStream.getTracks().forEach((track) => track.stop());
+            mediaStream = null;
+            startCameraBtn.textContent = "Activate Camera";
+            takePhotoBtn.classList.add("hidden");
+            takePhotoBtn.disabled = true;
+            capturedPhotoBase64 = null;
+            showMessage("Camera stopped.", "info");
+            return; // Exit if stopping camera
           }
           mediaStream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: "environment" },
           }); // Prefer rear camera
-
-          // Show the camera preview container
-          document
-            .getElementById("camera-preview-container")
-            .classList.remove("hidden");
-
           cameraFeed.srcObject = mediaStream;
-          cameraFeed.classList.remove("hidden");
+          cameraFeed.classList.remove("hidden"); // Keep hidden, it's just for capturing
           photoPreview.classList.add("hidden");
-          cameraPlaceholderText.classList.add("hidden");
+          // cameraPlaceholderText.classList.add("hidden"); // Removed from HTML
           takePhotoBtn.classList.remove("hidden");
           takePhotoBtn.disabled = false;
           startCameraBtn.textContent = "Stop Camera"; // Change button text
-          showMessage("Camera activated!", "success");
+          showMessage("Camera activated! Click 'Take Photo' to capture.", "success");
         } catch (err) {
           console.error("Error accessing camera:", err);
           showMessage(
@@ -2363,38 +2291,20 @@
         if (mediaStream) {
           photoCanvas.width = cameraFeed.videoWidth;
           photoCanvas.height = cameraFeed.videoHeight;
-          context.drawImage(
-            cameraFeed,
-            0,
-            0,
-            photoCanvas.width,
-            photoCanvas.height
-          );
+          context.drawImage(cameraFeed, 0, 0, photoCanvas.width, photoCanvas.height);
           capturedPhotoBase64 = photoCanvas.toDataURL("image/png"); // Get image as Base64
-          photoPreview.src = capturedPhotoBase64;
-          photoPreview.classList.remove("hidden");
-          cameraFeed.classList.add("hidden");
-          cameraPlaceholderText.classList.add("hidden");
-
-          // Track photo taken
-          if (currentUserData) {
-            const userDocRef = doc(
-              db,
-              `artifacts/${appId}/users/${userId}/profile`,
-              "data"
-            );
-            updateDoc(userDocRef, {
-              photosTaken: arrayUnion(Date.now().toString()), // Add timestamp as unique identifier
-            });
-          }
-
-          showMessage("Photo captured!", "success");
-          // Optionally stop camera after taking photo
+          // photoPreview.src = capturedPhotoBase64; // No longer displaying preview
+          // photoPreview.classList.remove("hidden"); // No longer displaying preview
+          cameraFeed.classList.add("hidden"); // Hide camera feed after capture
+          // cameraPlaceholderText.classList.add("hidden"); // Removed from HTML
+          showMessage("Photo captured! It will be attached to the trash can.", "success");
+          // Stop camera after taking photo
           if (mediaStream) {
             mediaStream.getTracks().forEach((track) => track.stop());
             mediaStream = null;
             startCameraBtn.textContent = "Activate Camera";
             takePhotoBtn.classList.add("hidden");
+            takePhotoBtn.disabled = true;
           }
         } else {
           showMessage("No camera stream active to take a photo.", "error");
@@ -2408,87 +2318,44 @@
       uploadPhotoInput.addEventListener("change", (event) => {
         const file = event.target.files[0];
         if (file) {
-          // Show the camera preview container
-          document
-            .getElementById("camera-preview-container")
-            .classList.remove("hidden");
-
           const reader = new FileReader();
           reader.onload = (e) => {
             capturedPhotoBase64 = e.target.result;
-            photoPreview.src = capturedPhotoBase64;
-            photoPreview.classList.remove("hidden");
-            cameraFeed.classList.add("hidden");
-            cameraPlaceholderText.classList.add("hidden");
+            // photoPreview.src = capturedPhotoBase64; // No longer displaying preview
+            // photoPreview.classList.remove("hidden"); // No longer displaying preview
+            cameraFeed.classList.add("hidden"); // Ensure camera feed is hidden
+            // cameraPlaceholderText.classList.add("hidden"); // Removed from HTML
             takePhotoBtn.classList.add("hidden"); // Hide take photo button for uploaded image
+            takePhotoBtn.disabled = true;
             if (mediaStream) {
               // Stop camera if active
               mediaStream.getTracks().forEach((track) => track.stop());
               mediaStream = null;
               startCameraBtn.textContent = "Activate Camera";
             }
-
-            // Track photo uploaded
-            if (currentUserData) {
-              const userDocRef = doc(
-                db,
-                `artifacts/${appId}/users/${userId}/profile`,
-                "data"
-              );
-              updateDoc(userDocRef, {
-                photosTaken: arrayUnion(Date.now().toString()), // Add timestamp as unique identifier
-              });
-            }
-
-            showMessage("Photo uploaded!", "success");
+            showMessage("Photo uploaded! It will be attached to the trash can.", "success");
           };
           reader.readAsDataURL(file);
         }
       });
 
-      // Function to reset camera and photo preview state
+      // Function to reset camera and photo functionality state
       function resetCameraAndPhotoPreview() {
         if (mediaStream) {
           mediaStream.getTracks().forEach((track) => track.stop());
           mediaStream = null;
         }
-        // Hide the camera preview container
-        document
-          .getElementById("camera-preview-container")
-          .classList.add("hidden");
         cameraFeed.classList.add("hidden");
         photoCanvas.classList.add("hidden");
         photoPreview.classList.add("hidden");
-        cameraPlaceholderText.classList.remove("hidden");
+        // cameraPlaceholderText.classList.remove("hidden"); // Removed from HTML
         startCameraBtn.textContent = "Activate Camera";
         takePhotoBtn.classList.add("hidden");
         takePhotoBtn.disabled = true;
         capturedPhotoBase64 = null;
-        uploadPhotoInput.value = ""; // Clear file input
+        uploadPhotoInput.value = ''; // Clear file input
       }
 
-      // Function to update theme color based on active tab
-      function updateThemeColor(tabId) {
-        const themeColorMeta = document.getElementById("theme-color-meta");
-        let color = "#1d4ed8"; // Default blue
-
-        switch (tabId) {
-          case "map":
-            color = "#1d4ed8"; // blue-700
-            break;
-          case "mark-can":
-            color = "#dc2626"; // red-600
-            break;
-          case "chat":
-            color = "#10b981"; // emerald-500
-            break;
-          case "progress":
-            color = "#f59e0b"; // amber-500
-            break;
-        }
-
-        themeColorMeta.setAttribute("content", color);
-      }
 
       // Tab switching logic
       window.showTab = function (tabId) {
@@ -2510,7 +2377,7 @@
           button.classList.remove("active", "blue", "red", "green", "yellow");
         });
 
-        // Remove all specific color classes from ALL btn-primary elements
+        // Remove all specific color classes from ALL btn-primary elements, EXCEPT 'purple'
         document.querySelectorAll(".btn-primary").forEach((btn) => {
           btn.classList.remove("blue", "red", "green", "yellow");
         });
@@ -2535,23 +2402,16 @@
             .forEach((btn) => btn.classList.add("red"));
         } else if (tabId === "chat") {
           activeTabButton.classList.add("green");
-          headerTrashIcon.classList.add(
-            "text-green-600"
-          ); /* Use green-600 for consistency */
+          headerTrashIcon.classList.add("text-green-600"); /* Use green-600 for consistency */
           // Apply green to buttons within this tab
           document
             .querySelectorAll("#content-chat .btn-primary")
             .forEach((btn) => btn.classList.add("green"));
         } else if (tabId === "progress") {
           activeTabButton.classList.add("yellow");
-          headerTrashIcon.classList.add(
-            "text-amber-500"
-          ); /* Use amber-500 for yellow */
+          headerTrashIcon.classList.add("text-amber-500"); /* Use amber-500 for yellow */
           // My Progress tab does not have dynamic buttons that need recoloring.
         }
-
-        // Update theme color for mobile browser
-        updateThemeColor(tabId);
 
         document.getElementById(`content-${tabId}`).classList.remove("hidden");
 
@@ -2567,7 +2427,7 @@
           }
         } else if (tabId === "map") {
           // Trigger map resize event to ensure it renders correctly after being hidden/shown
-          if (map) {
+          if (mapInitialized && map) { // Only interact with map if it's initialized
             google.maps.event.trigger(map, "resize");
             // Recenter map if there are trash cans, otherwise use default
             if (trashCans.length > 0) {
@@ -2576,11 +2436,13 @@
                 bounds.extend({ lat: can.latitude, lng: can.longitude })
               );
               map.fitBounds(bounds);
-              map.setZoom(Math.min(map.getZoom(), 15)); // Adjust zoom level
+              map.setZoom(Math.min(map.getZoom(), currentUserData?.defaultMapZoom || 15)); // Adjust zoom level
             } else {
               map.setCenter({ lat: 34.0522, lng: -118.2437 }); // Default center (e.g., LA)
-              map.setZoom(12);
+              map.setZoom(currentUserData?.defaultMapZoom || 12);
             }
+          } else {
+              console.warn("Map not yet initialized when trying to show map tab.");
           }
         }
         // Re-render Lucide icons for the newly active tab
@@ -2588,495 +2450,13 @@
       };
 
       // Initialize the app on window load (Firebase will initialize before map callback if defer)
-      window.onload = function () {
-        initializeFirebaseApp();
-        // Initialize Lucide icons on page load with a small delay to ensure library is loaded
-        setTimeout(function () {
-          if (typeof lucide !== "undefined") {
-            lucide.createIcons();
-          } else {
-            // Retry after a bit more time if lucide isn't available yet
-            setTimeout(function () {
-              if (typeof lucide !== "undefined") {
-                lucide.createIcons();
-              }
-            }, 500);
-          }
-        }, 100);
-      };
-
-      // Also initialize icons when DOM content is loaded (fallback)
-      document.addEventListener("DOMContentLoaded", function () {
-        setTimeout(function () {
-          if (typeof lucide !== "undefined") {
-            lucide.createIcons();
-          }
-        }, 100);
-      });
-
-      // Utility functions for data structure management
-      function saveUserSettings() {
-        if (userId) {
-          localStorage.setItem(
-            `userSettings_${userId}`,
-            JSON.stringify(userSettings)
-          );
-        }
-      }
-
-      function loadUserSettings() {
-        if (userId) {
-          const saved = localStorage.getItem(`userSettings_${userId}`);
-          if (saved) {
-            userSettings = { ...userSettings, ...JSON.parse(saved) };
-          }
-        }
-      }
-
-      function addToSearchHistory(searchTerm) {
-        if (!searchHistory.includes(searchTerm)) {
-          searchHistory.unshift(searchTerm);
-          searchHistory = searchHistory.slice(0, 10); // Keep only last 10 searches
-          if (userId) {
-            localStorage.setItem(
-              `searchHistory_${userId}`,
-              JSON.stringify(searchHistory)
-            );
-          }
-        }
-      }
-
-      function loadSearchHistory() {
-        if (userId) {
-          const saved = localStorage.getItem(`searchHistory_${userId}`);
-          if (saved) {
-            searchHistory = JSON.parse(saved);
-          }
-        }
-      }
-
-      function addToFavorites(location) {
-        const exists = favoriteLocations.find((fav) => fav.id === location.id);
-        if (!exists) {
-          favoriteLocations.push({
-            ...location,
-            addedAt: new Date().toISOString(),
-          });
-          if (userId) {
-            localStorage.setItem(
-              `favorites_${userId}`,
-              JSON.stringify(favoriteLocations)
-            );
-          }
-          showMessage("Location added to favorites!", "success");
-        } else {
-          showMessage("Location already in favorites!", "info");
-        }
-      }
-
-      function removeFromFavorites(locationId) {
-        favoriteLocations = favoriteLocations.filter(
-          (fav) => fav.id !== locationId
-        );
-        if (userId) {
-          localStorage.setItem(
-            `favorites_${userId}`,
-            JSON.stringify(favoriteLocations)
-          );
-        }
-        showMessage("Location removed from favorites!", "success");
-      }
-
-      function loadFavorites() {
-        if (userId) {
-          const saved = localStorage.getItem(`favorites_${userId}`);
-          if (saved) {
-            favoriteLocations = JSON.parse(saved);
-          }
-        }
-      }
-
-      function addToRecentRoutes(route) {
-        const routeId = `${route.start}-${route.end}`;
-        const exists = recentRoutes.find((r) => r.id === routeId);
-        if (!exists) {
-          recentRoutes.unshift({
-            id: routeId,
-            ...route,
-            createdAt: new Date().toISOString(),
-          });
-          recentRoutes = recentRoutes.slice(0, 5); // Keep only last 5 routes
-          if (userId) {
-            localStorage.setItem(
-              `recentRoutes_${userId}`,
-              JSON.stringify(recentRoutes)
-            );
-          }
-        }
-      }
-
-      function loadRecentRoutes() {
-        if (userId) {
-          const saved = localStorage.getItem(`recentRoutes_${userId}`);
-          if (saved) {
-            recentRoutes = JSON.parse(saved);
-          }
-        }
-      }
-
-      function checkAchievements() {
-        if (!currentUserData) return;
-
-        const stats = {
-          visits: (currentUserData.visitedTrashCans || []).length,
-          photos: (currentUserData.photosTaken || []).length,
-          comments: (currentUserData.comments || []).length,
-          marked: (currentUserData.markedTrashCans || []).length,
-          distance: currentUserData.totalDistanceWalked || 0,
-        };
-
-        // Check for new achievements
-        Object.entries(achievementSystem.badges).forEach(([key, badge]) => {
-          let earned = false;
-
-          switch (key) {
-            case "first_visit":
-              earned = stats.visits >= badge.requirement;
-              break;
-            case "explorer":
-              earned = stats.visits >= badge.requirement;
-              break;
-            case "photographer":
-              earned = stats.photos >= badge.requirement;
-              break;
-            case "community":
-              earned = stats.comments >= badge.requirement;
-              break;
-            case "mapper":
-              earned = stats.marked >= badge.requirement;
-              break;
-            case "walker":
-              earned = stats.distance >= badge.requirement;
-              break;
-          }
-
-          if (earned && !currentUserData.badges.includes(badge.name)) {
-            showMessage(
-              `🏆 Achievement Unlocked: ${badge.name}! ${badge.description}`,
-              "success"
-            );
-            // Add to user's badges
-            const userDocRef = doc(
-              db,
-              `artifacts/${appId}/users/${userId}/profile`,
-              "data"
-            );
-            updateDoc(userDocRef, {
-              badges: arrayUnion(badge.name),
-            });
-          }
-        });
-      }
-
-      function filterTrashCans(criteria) {
-        return trashCans.filter((can) => {
-          if (criteria.category && can.category !== criteria.category)
-            return false;
-          if (criteria.hasPhoto && !can.imageUrl) return false;
-          if (
-            criteria.visited &&
-            !currentUserData?.visitedTrashCans?.includes(can.id)
-          )
-            return false;
-          if (
-            criteria.notVisited &&
-            currentUserData?.visitedTrashCans?.includes(can.id)
-          )
-            return false;
-          if (criteria.recent) {
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-            const canDate = can.createdAt?.toDate() || new Date(0);
-            if (canDate < sevenDaysAgo) return false;
-          }
-          if (criteria.searchTerm) {
-            const searchLower = criteria.searchTerm.toLowerCase();
-            return (
-              can.id.toLowerCase().includes(searchLower) ||
-              can.address.toLowerCase().includes(searchLower)
-            );
-          }
-          return true;
-        });
-      }
-
-      // Function to display enhanced data structures
-      function displayEnhancedData() {
-        // Display search history
-        const searchHistoryDisplay = document.getElementById(
-          "search-history-display"
-        );
-        if (searchHistory.length === 0) {
-          searchHistoryDisplay.innerHTML =
-            '<p class="italic">No recent searches</p>';
-        } else {
-          searchHistoryDisplay.innerHTML = searchHistory
-            .slice(0, 5)
-            .map((term) => `<div class="mb-1">🔍 ${term}</div>`)
-            .join("");
-        }
-
-        // Display favorite locations
-        const favoritesDisplay = document.getElementById("favorites-display");
-        if (favoriteLocations.length === 0) {
-          favoritesDisplay.innerHTML =
-            '<p class="italic">No favorite locations</p>';
-        } else {
-          favoritesDisplay.innerHTML = favoriteLocations
-            .slice(0, 5)
-            .map(
-              (fav) =>
-                `<div class="mb-1">⭐ ${fav.description || fav.address}</div>`
-            )
-            .join("");
-        }
-
-        // Display recent routes
-        const recentRoutesDisplay = document.getElementById(
-          "recent-routes-display"
-        );
-        if (recentRoutes.length === 0) {
-          recentRoutesDisplay.innerHTML =
-            '<p class="italic">No recent routes</p>';
-        } else {
-          recentRoutesDisplay.innerHTML = recentRoutes
-            .slice(0, 3)
-            .map(
-              (route) =>
-                `<div class="mb-1">🗺️ ${route.start} → ${
-                  route.end
-                } (${route.distance.toFixed(2)}km)</div>`
-            )
-            .join("");
-        }
-
-        // Display user settings
-        document.getElementById("units-display").textContent =
-          userSettings.preferredUnits;
-        document.getElementById("zoom-display").textContent =
-          userSettings.defaultMapZoom;
-        document.getElementById("notifications-display").textContent =
-          userSettings.notificationsEnabled ? "Enabled" : "Disabled";
-      }
-
-      // Initialize the app on window load (Firebase will initialize before map callback if defer)
       window.onload = initializeFirebaseApp;
 
-      // Search and Filter Event Listeners
-      document.addEventListener("DOMContentLoaded", function () {
-        const searchBtn = document.getElementById("search-btn");
-        const searchInput = document.getElementById("trash-can-search");
-        const filterDropdownBtn = document.getElementById(
-          "filter-dropdown-btn"
-        );
-        const filterDropdown = document.getElementById("filter-dropdown");
-        const applyFiltersBtn = document.getElementById("apply-filters-btn");
-        const clearFiltersBtn = document.getElementById("clear-filters-btn");
-        const filterCheckboxes = document.querySelectorAll(".filter-checkbox");
-        const activeFiltersDisplay = document.getElementById(
-          "active-filters-display"
-        );
-        const activeFiltersTags = document.getElementById(
-          "active-filters-tags"
-        );
-        const activeFiltersCount = document.getElementById(
-          "active-filters-count"
-        );
-
-        let activeFilters = [];
-
-        if (searchBtn) {
-          searchBtn.addEventListener("click", function () {
-            const searchTerm = searchInput.value.trim();
-            if (searchTerm) {
-              addToSearchHistory(searchTerm);
-              const filteredCans = filterTrashCans({ searchTerm: searchTerm });
-              displayFilteredTrashCans(filteredCans);
-              showMessage(
-                `Found ${filteredCans.length} trash cans matching "${searchTerm}"`,
-                "success"
-              );
-            }
-          });
-        }
-
-        if (searchInput) {
-          searchInput.addEventListener("keypress", function (e) {
-            if (e.key === "Enter") {
-              searchBtn.click();
-            }
-          });
-        }
-
-        // Toggle filter dropdown
-        if (filterDropdownBtn) {
-          filterDropdownBtn.addEventListener("click", function () {
-            filterDropdown.classList.toggle("hidden");
-          });
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener("click", function (e) {
-          if (
-            !filterDropdownBtn.contains(e.target) &&
-            !filterDropdown.contains(e.target)
-          ) {
-            filterDropdown.classList.add("hidden");
-          }
-        });
-
-        // Apply filters
-        if (applyFiltersBtn) {
-          applyFiltersBtn.addEventListener("click", function () {
-            activeFilters = [];
-            filterCheckboxes.forEach((checkbox) => {
-              if (checkbox.checked) {
-                activeFilters.push(checkbox.getAttribute("data-filter"));
-              }
-            });
-
-            updateActiveFiltersDisplay();
-            applyActiveFilters();
-            filterDropdown.classList.add("hidden");
-          });
-        }
-
-        // Clear all filters
-        if (clearFiltersBtn) {
-          clearFiltersBtn.addEventListener("click", function () {
-            filterCheckboxes.forEach((checkbox) => {
-              checkbox.checked = false;
-            });
-            activeFilters = [];
-            updateActiveFiltersDisplay();
-            displayTrashCansOnMap(); // Show all cans
-            showMessage("All filters cleared", "info");
-            filterDropdown.classList.add("hidden");
-          });
-        }
-
-        function updateActiveFiltersDisplay() {
-          if (activeFilters.length === 0) {
-            activeFiltersDisplay.classList.add("hidden");
-            activeFiltersCount.classList.add("hidden");
-          } else {
-            activeFiltersDisplay.classList.remove("hidden");
-            activeFiltersCount.textContent = activeFilters.length;
-            activeFiltersCount.classList.remove("hidden");
-
-            // Update active filter tags
-            activeFiltersTags.innerHTML = activeFilters
-              .map((filter) => {
-                const filterLabels = {
-                  hasPhoto: "📸 Has Photo",
-                  visited: "✅ Visited",
-                  notVisited: "❌ Not Visited",
-                  recent: "🕒 Recent",
-                };
-                return `<span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">${filterLabels[filter]}</span>`;
-              })
-              .join("");
-          }
-        }
-
-        function applyActiveFilters() {
-          if (activeFilters.length === 0) {
-            displayTrashCansOnMap();
-            showMessage("No filters applied", "info");
-            return;
-          }
-
-          let criteria = {};
-
-          activeFilters.forEach((filter) => {
-            switch (filter) {
-              case "hasPhoto":
-                criteria.hasPhoto = true;
-                break;
-              case "visited":
-                criteria.visited = true;
-                break;
-              case "notVisited":
-                criteria.notVisited = true;
-                break;
-              case "recent":
-                criteria.recent = true;
-                break;
-            }
-          });
-
-          const filteredCans = filterTrashCans(criteria);
-          displayFilteredTrashCans(filteredCans);
-          showMessage(
-            `Showing ${filteredCans.length} filtered trash cans`,
-            "info"
-          );
-        }
+      // Call lucide.createIcons() immediately after the DOM is loaded
+      // This ensures all initial icons are rendered without waiting for Firebase or other async ops.
+      document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
       });
-
-      // Function to display filtered trash cans
-      function displayFilteredTrashCans(filteredCans) {
-        // Clear existing markers
-        for (const canId in mapMarkers) {
-          mapMarkers[canId].setMap(null);
-        }
-        mapMarkers = {};
-
-        // Add markers only for filtered cans
-        filteredCans.forEach((can) => {
-          const position = { lat: can.latitude, lng: can.longitude };
-          const marker = new google.maps.Marker({
-            position: position,
-            map: map,
-            icon: {
-              url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
-              scaledSize: new google.maps.Size(32, 32),
-            },
-            title: can.description || "Trash Can",
-          });
-
-          let infoContent = `
-            <div class="trash-can-marker-content">
-                <strong>Trash Can ID:</strong> ${can.id.substring(0, 8)}...<br>
-                <strong>Description:</strong> ${can.description || "N/A"}<br>
-                <strong>Marked by:</strong> ${
-                  can.markedByUserDisplayName || "Unknown"
-                }<br>
-          `;
-          if (can.imageUrl) {
-            infoContent += `<img src="${can.imageUrl}" alt="Trash Can Photo" class="info-window-image">`;
-          }
-          infoContent += `<br><button onclick="window.selectTrashCanForChat('${can.id}')" class="btn-primary p-2 text-sm rounded-md mt-2">View Chat</button></div>`;
-
-          marker.addListener("click", () => {
-            infoWindow.setContent(infoContent);
-            infoWindow.open(map, marker);
-            trackVisitedCan(can.id);
-          });
-
-          mapMarkers[can.id] = marker;
-        });
-
-        // Fit map to filtered bounds
-        if (filteredCans.length > 0) {
-          const bounds = new google.maps.LatLngBounds();
-          filteredCans.forEach((can) =>
-            bounds.extend({ lat: can.latitude, lng: can.longitude })
-          );
-          map.fitBounds(bounds);
-          map.setZoom(Math.min(map.getZoom(), 15));
-        }
-      }
     </script>
   </body>
 </html>
